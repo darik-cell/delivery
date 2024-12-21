@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="10" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="15-create-couriers-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="11" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="15-create-trigger-remove-courier.sql"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="12" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="15-create-trigger-add-courier.sql"
+                 splitStatements="false"
+                 stripComments="true"/>
+    </changeSet>
+</databaseChangeLog>

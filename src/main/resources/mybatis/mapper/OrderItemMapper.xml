@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.delivery.repository.OrderItemRepository">
+
+    <resultMap id="OrderItemResultMap" type="com.myapp.delivery.domain.order_item.OrderItem" autoMapping="false">
+        <id property="id" column="order_item_id"/>
+        <result property="orderId" column="order_item_order_id"/>
+        <result property="quantity" column="order_item_quantity"/>
+        <result property="priceAtOrderTime" column="order_item_price_at_order_time"/>
+        <result property="createdAt" column="order_item_created_at"/>
+        <result property="updatedAt" column="order_item_updated_at"/>
+        <association property="menuItem"
+                     javaType="com.myapp.delivery.domain.menu_item.MenuItem"
+                     select="com.myapp.delivery.repository.MenuItemRepository.findById"
+                     column="menu_item_id"/>
+    </resultMap>
+
+    <select id="findOrderItemsByOrderId" resultMap="OrderItemResultMap">
+        SELECT oi.id AS order_item_id, oi.order_id AS order_item_order_id, oi.menu_item_id,
+        oi.quantity AS order_item_quantity, oi.price_at_order_time AS order_item_price_at_order_time,
+        oi.created_at AS order_item_created_at, oi.updated_at AS order_item_updated_at
+        FROM order_items oi
+        WHERE oi.order_id = #{orderId}
+    </select>
+
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_items (order_id, menu_item_id, quantity, price_at_order_time, created_at, updated_at)
+        VALUES (#{orderId}, #{menuItem.id}, #{quantity}, #{priceAtOrderTime}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <insert id="createOrderItems" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO order_items (order_id, menu_item_id, quantity, price_at_order_time, created_at, updated_at)
+        VALUES
+        <foreach collection="orderItems" item="item" separator=",">
+            (#{item.orderId}, #{item.menuItem.id}, #{item.quantity}, #{item.priceAtOrderTime}, #{item.createdAt}, #{item.updatedAt})
+        </foreach>
+    </insert>
+
+    <update id="update">
+        UPDATE order_items
+        SET order_id = #{orderId},
+        menu_item_id = #{menuItem.id},
+        quantity = #{quantity},
+        price_at_order_time = #{priceAtOrderTime},
+        updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM order_items WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.delivery.repository.OrderRepository">
+
+    <resultMap id="OrderResultMap" type="com.myapp.delivery.domain.order.Order" autoMapping="false">
+        <id property="id" column="order_id"/>
+        <result property="customerId" column="order_client_id"/>
+        <result property="restaurantId" column="order_restaurant_id"/>
+        <result property="status" column="order_status"
+                typeHandler="com.myapp.delivery.repository.StatusTypeHandler"/>
+        <result property="totalPrice" column="order_total_price"/>
+        <result property="paymentMethod" column="order_payment_method"
+                typeHandler="com.myapp.delivery.repository.PaymentMethodTypeHandler"/>
+        <result property="paymentStatus" column="order_payment_status"
+                typeHandler="com.myapp.delivery.repository.PaymentStatusTypeHandler"/>
+        <result property="orderTime" column="order_order_time"/>
+        <result property="deliveryAddress" column="order_delivery_address"/>
+        <result property="deliveryTime" column="order_delivery_time"/>
+        <result property="createdAt" column="order_created_at"/>
+        <result property="updatedAt" column="order_updated_at"/>
+        <result property="courierId" column="order_courier_id"/>
+        <collection property="orderItems"
+                    ofType="com.myapp.delivery.domain.order_item.OrderItem"
+                    select="com.myapp.delivery.repository.OrderItemRepository.findOrderItemsByOrderId"
+                    column="order_id"
+                    autoMapping="false"/>
+    </resultMap>
+
+    <select id="findOrdersByCustomerId" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at
+        FROM orders o
+        WHERE o.client_id = #{customerId}
+    </select>
+
+    <select id="findActualOrdersByCustomerId" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at
+        FROM orders o
+        WHERE o.client_id = #{customerId}
+        AND o.status in ('в обработке', 'готовится', 'назначен курьер', 'в пути')
+    </select>
+
+    <select id="findOrdersWithNoCourier" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
+        FROM orders o
+        WHERE o.status LIKE 'готовится' AND o.courier_id IS NULL
+    </select>
+
+    <select id="findActualOrdersByCourierId" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
+        FROM orders o
+        WHERE o.courier_id = #{courierId} AND o.status LIKE 'назначен курьер'
+    </select>
+
+    <select id="findOnTheWayOrdersByCourierId" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
+        FROM orders o
+        WHERE o.courier_id = #{courierId} AND o.status LIKE 'в пути'
+    </select>
+
+    <select id="findOrderById" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
+        FROM orders o
+        WHERE o.id = #{id}
+    </select>
+
+    <!-- Вставка нового заказа -->
+    <insert id="create" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO orders (
+        client_id,
+        restaurant_id,
+        status,
+        total_price,
+        payment_method,
+        payment_status,
+        order_time,
+        delivery_address,
+        delivery_time
+        )
+        VALUES (
+        #{customerId},
+        #{restaurantId},
+        #{status},
+        #{totalPrice},
+        #{paymentMethod},
+        #{paymentStatus},
+        #{orderTime},
+        #{deliveryAddress},
+        #{deliveryTime}
+        )
+    </insert>
+
+    <update id="setStatus">
+        UPDATE orders
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <update id="setPaymentStatusPayed">
+        UPDATE orders
+        SET payment_status = 'Оплачено'
+        WHERE id = #{id}
+    </update>
+
+    <update id="setDeliveryTime">
+        UPDATE orders
+        SET delivery_time = #{deliveryTime}
+        WHERE id = #{id}
+    </update>
+
+    <update id="setCourier">
+        UPDATE orders
+        SET courier_id = #{courierId}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM order_items WHERE id = #{id}
+    </delete>
+
+</mapper>

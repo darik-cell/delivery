@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!-- Регистрация кастомного TypeHandler -->
+    <typeHandlers>
+        <typeHandler handler="com.myapp.delivery.repository.CategoryTypeHandler"/>
+        <typeHandler handler="com.myapp.delivery.repository.PaymentMethodTypeHandler"/>
+        <typeHandler handler="com.myapp.delivery.repository.PaymentStatusTypeHandler"/>
+        <typeHandler handler="com.myapp.delivery.repository.StatusTypeHandler"/>
+    </typeHandlers>
+
+    <!-- Здесь могут быть другие настройки MyBatis -->
+
+</configuration>

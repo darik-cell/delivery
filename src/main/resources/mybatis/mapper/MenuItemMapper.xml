@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.delivery.repository.MenuItemRepository">
+
+    <resultMap id="MenuItemResultMap" type="com.myapp.delivery.domain.menu_item.MenuItem" autoMapping="false">
+        <id property="id" column="menu_item_id"/>
+        <result property="restaurantId" column="menu_item_restaurant_id"/>
+        <result property="name" column="menu_item_name"/>
+        <result property="description" column="menu_item_description"/>
+        <result property="price" column="menu_item_price"/>
+        <result property="category" column="menu_item_category"
+                typeHandler="com.myapp.delivery.repository.CategoryTypeHandler"/>
+        <result property="imageUrl" column="menu_item_image_url"/>
+        <result property="availabilityStatus" column="menu_item_availability_status"/>
+        <result property="weight" column="menu_item_weight"/>
+        <result property="calories" column="menu_item_calories"/>
+        <result property="createdAt" column="menu_item_created_at"/>
+        <result property="updatedAt" column="menu_item_updated_at"/>
+        <collection property="ingredients"
+                    ofType="com.myapp.delivery.domain.ingredient.Ingredient"
+                    resultMap="com.myapp.delivery.repository.IngredientRepository.IngredientResultMap"
+                    autoMapping="false"/>
+    </resultMap>
+
+    <!-- SQL query to retrieve a MenuItem by its ID -->
+    <select id="findById" resultMap="MenuItemResultMap" parameterType="java.lang.Long">
+        SELECT
+        menu_items.id AS menu_item_id,
+        menu_items.restaurant_id AS menu_item_restaurant_id,
+        menu_items.name AS menu_item_name,
+        menu_items.description AS menu_item_description,
+        menu_items.price AS menu_item_price,
+        menu_items.category AS menu_item_category,
+        menu_items.image_url AS menu_item_image_url,
+        menu_items.availability_status AS menu_item_availability_status,
+        menu_items.calories as menu_item_calories,
+        menu_items.weight as menu_item_weight,
+        menu_items.created_at AS menu_item_created_at,
+        menu_items.updated_at AS menu_item_updated_at,
+        i.id as ingredient_id,
+        i.name as ingredient_name
+        FROM menu_items
+        join menu_items_ingredients mii on mii.menu_item_id = menu_items.id
+        join ingredients i on i.id = mii.ingredient_id
+        WHERE menu_items.id = #{id}
+        LIMIT 1
+    </select>
+
+    <select id="findAll" resultMap="MenuItemResultMap" parameterType="java.lang.Long">
+        SELECT
+        menu_items.id AS menu_item_id,
+        menu_items.restaurant_id AS menu_item_restaurant_id,
+        menu_items.name AS menu_item_name,
+        menu_items.description AS menu_item_description,
+        menu_items.price AS menu_item_price,
+        menu_items.category AS menu_item_category,
+        menu_items.image_url AS menu_item_image_url,
+        menu_items.availability_status AS menu_item_availability_status,
+        menu_items.calories as menu_item_calories,
+        menu_items.weight as menu_item_weight,
+        menu_items.created_at AS menu_item_created_at,
+        menu_items.updated_at AS menu_item_updated_at,
+        i.id as ingredient_id,
+        i.name as ingredient_name
+        FROM menu_items
+        join menu_items_ingredients mii on mii.menu_item_id = menu_items.id
+        join ingredients i on i.id = mii.ingredient_id
+    </select>
+
+    <!-- SQL query to create a new MenuItem -->
+    <insert id="insertMenuItem" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO menu_items (restaurant_id, name, description, price, category, image_url, availability_status,
+        calories, weight, created_at, updated_at)
+        VALUES (#{restaurantId}, #{name}, #{description}, #{price}, #{category.dbValue}, #{imageUrl},
+        #{availabilityStatus}, #{calories}, #{weight}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+    </insert>
+
+    <insert id="insertMenuItemIngredients">
+        <foreach collection="ingredients" item="ingredient" separator=";">
+            INSERT INTO menu_items_ingredients (menu_item_id, ingredient_id)
+            VALUES (#{menuItemId}, #{ingredient.id})
+        </foreach>
+    </insert>
+
+    <!-- SQL query to update an existing MenuItem -->
+    <update id="updateMenuItem">
+        UPDATE menu_items
+        SET
+        restaurant_id = #{restaurantId},
+        name = #{name},
+        description = #{description},
+        price = #{price},
+        category = #{category.dbValue},
+        image_url = #{imageUrl},
+        availability_status = #{availabilityStatus},
+        calories = #{calories},
+        weight = #{weight},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateMenuItemIngredients">
+        delete from menu_items_ingredients where menu_item_id = #{menuItemId};
+
+        <foreach collection="ingredients" item="ingredient" separator=";">
+            INSERT INTO menu_items_ingredients (menu_item_id, ingredient_id)
+            VALUES (#{menuItemId}, #{ingredient.id})
+        </foreach>
+    </update>
+
+    <!-- SQL query to delete a MenuItem -->
+    <delete id="delete">
+        DELETE FROM menu_items WHERE id = #{id}
+    </delete>
+
+</mapper>

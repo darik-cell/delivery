@@ -1,0 +1,578 @@
+File: db.changelog-master.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <changeSet id="0" author="alyosander">
+        <tagDatabase tag="db_init"/>
+    </changeSet>
+
+    <include file="v.1.0.0/db.changelog-v.1.0.0.xml" relativeToChangelogFile="true"/>
+
+    <changeSet id="9" author="alyosander">
+        <tagDatabase tag="v.1.0"/>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 01-changeset-users-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="0" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="01-create-timestamp-trigger.sql"
+                 splitStatements="false"
+                 stripComments="false"/>
+        <rollback>
+            <sqlFile path="01-drop-timestamp-trigger.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="1" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="01-create-users-table.sql"
+                 splitStatements="false"
+                 stripComments="false"/>
+        <rollback>
+            <sqlFile path="01-drop-users-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 01-create-timestamp-trigger.sql
+CREATE OR REPLACE FUNCTION update_timestamp()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+File: 01-create-users-table.sql
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR,
+    phone VARCHAR,
+    username VARCHAR UNIQUE NOT NULL,
+    password_hash VARCHAR,
+    address VARCHAR,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER user_set_timestamp
+BEFORE UPDATE ON users
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 01-drop-timestamp-trigger.sql
+DROP FUNCTION IF EXISTS update_timestamp();
+
+File: 01-drop-users-table.sql
+DROP TRIGGER IF EXISTS user_set_timestamp ON users;
+DROP TABLE users;
+
+File: 10-changeset-restaurants-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="10-create-restaurants-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="10-drop-restaurants-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 10-create-restaurants-table.sql
+CREATE TABLE IF NOT EXISTS restaurants (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    email VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+insert into restaurants(name, address, phone, email) values ('test', 'test', 'test', 'test');
+
+CREATE TRIGGER restaurants_set_timestamp
+BEFORE UPDATE ON restaurants
+FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 10-drop-restaurants-table.sql
+DROP TRIGGER IF EXISTS restaurants_set_timestamp ON restaurants;
+DROP TABLE IF EXISTS restaurants;
+
+File: 1111111-changeset-init-data.xml
+
+File: 1111111-init-data.sql
+
+File: 15-changeset-couriers-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="10" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="15-create-couriers-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="11" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="15-create-trigger-remove-courier.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+
+    <changeSet id="12" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="15-create-trigger-add-courier.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+    </changeSet>
+</databaseChangeLog>
+
+File: 15-create-couriers-table.sql
+-- Создание таблицы couriers для отслеживания статуса курьеров
+CREATE TABLE IF NOT EXISTS couriers (
+    user_id INT PRIMARY KEY,
+    is_on_shift BOOLEAN DEFAULT FALSE,  -- Флаг, указывающий, на смене ли курьер
+    is_on_delivery BOOLEAN DEFAULT FALSE,  -- Флаг, указывающий, на доставке ли курьер
+    last_shift_start TIMESTAMP NULL,   -- Время начала последней смены
+    last_shift_end TIMESTAMP NULL,     -- Время окончания последней смены
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TRIGGER couriers_set_timestamp
+    BEFORE UPDATE ON couriers
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 15-create-trigger-add-courier.sql
+CREATE OR REPLACE FUNCTION add_courier_record_fn()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NEW.role = 'ROLE_COURIER' THEN
+        INSERT INTO couriers(user_id) VALUES (NEW.user_id);
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+
+File: 15-create-trigger-remove-courier.sql
+CREATE OR REPLACE FUNCTION remove_courier_record_fn()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    IF OLD.role = 'ROLE_COURIER' THEN
+        DELETE FROM couriers WHERE user_id = OLD.user_id;
+    END IF;
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+File: 20-changeset-orders-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="3" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="20-create-orders-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="20-drop-orders-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 20-create-orders-table.sql
+CREATE TABLE IF NOT EXISTS
+    orders
+(
+    id               SERIAL PRIMARY KEY,
+    client_id        INT            NOT NULL,
+    restaurant_id    INT            NOT NULL,
+    status           VARCHAR(20) DEFAULT 'в обработке' CHECK (status IN
+                                                              ('в обработке', 'готовится', 'назначен курьер', 'в пути',
+                                                               'доставлен', 'отменен')),
+    total_price      DECIMAL(10, 2) NOT NULL,
+    payment_method   VARCHAR(20) DEFAULT 'Карта' CHECK (payment_method IN ('Карта', 'Электронные кошельки', 'Наличные')),
+    payment_status   VARCHAR(20) DEFAULT 'Не оплачено' CHECK (payment_status IN ('Оплачено', 'Не оплачено')),
+    order_time       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+    delivery_address VARCHAR(255)   NOT NULL,
+    delivery_time    TIMESTAMP,
+    created_at       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+    updated_at       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
+    courier_id       INT         DEFAULT NULL,
+    FOREIGN KEY (client_id) REFERENCES users (id),
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
+    FOREIGN KEY (courier_id) REFERENCES couriers (user_id)
+);
+
+CREATE TRIGGER orders_set_timestamp
+    BEFORE UPDATE
+    ON orders
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 20-drop-orders-table.sql
+DROP TRIGGER IF EXISTS orders_set_timestamp ON orders;
+DROP TABLE IF EXISTS orders;
+
+File: 30-changeset-menu_items-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="4" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="30-create-menu_items-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="30-drop-menu_items-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 30-create-menu_items-table.sql
+CREATE TABLE IF NOT EXISTS menu_items
+(
+    id                  SERIAL PRIMARY KEY,
+    restaurant_id       INT            NOT NULL,
+    name                VARCHAR(100)   NOT NULL,
+    description         TEXT         DEFAULT NULL,
+    price               DECIMAL(10, 2) NOT NULL,
+    category            VARCHAR(50) CHECK (category IN
+                                           ('Суп', 'Закуска', 'Основное блюдо', 'Гарнир', 'Салат', 'Напиток')),
+    image_url           VARCHAR(255) DEFAULT NULL,
+    availability_status BOOLEAN      DEFAULT TRUE,
+    calories            int            not null,
+    weight              int            not null,
+    created_at          TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    updated_at          TIMESTAMP    DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants (id)
+);
+
+CREATE TRIGGER menu_items_set_timestamp
+    BEFORE UPDATE
+    ON menu_items
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 30-drop-menu_items-table.sql
+DROP TRIGGER IF EXISTS menu_items_set_timestamp ON menu_items;
+DROP TABLE IF EXISTS menu_items;
+
+File: 40-changeset-order_items-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="5" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="40-create-order_items-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="40-drop-order_items-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 40-create-order_items-table.sql
+CREATE TABLE IF NOT EXISTS order_items
+(
+    id       SERIAL PRIMARY KEY,
+    order_id            INT            NOT NULL,
+    menu_item_id        INT            NOT NULL,
+    quantity            INT       DEFAULT 1,
+    price_at_order_time DECIMAL(10, 2) NOT NULL,
+    created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders (id),
+    FOREIGN KEY (menu_item_id) REFERENCES menu_items (id)
+);
+
+CREATE TRIGGER order_items_set_timestamp
+    BEFORE UPDATE
+    ON order_items
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 40-drop-order_items-table.sql
+DROP TRIGGER IF EXISTS order_items_set_timestamp ON order_items;
+DROP TABLE IF EXISTS order_items;
+
+File: 50-changeset-users_roles-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="6" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="50-create-users_roles-tables.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="50-drop-users_roles-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 50-create-users_roles-tables.sql
+CREATE TABLE IF NOT EXISTS users_roles
+(
+    user_id int not null,
+    role varchar(255) not null CHECK (role IN ('ROLE_CUSTOMER', 'ROLE_ADMIN', 'ROLE_COURIER', 'ROLE_MANAGER')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    PRIMARY KEY (user_id, role)
+);
+
+CREATE TRIGGER users_roles_set_timestamp
+    BEFORE UPDATE
+    ON users_roles
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+-- Создание триггера для автоматического добавления записи в couriers при назначении роли ROLE_COURIER
+CREATE TRIGGER add_courier_record
+    AFTER INSERT ON users_roles
+    FOR EACH ROW
+EXECUTE FUNCTION add_courier_record_fn();
+
+-- Создание триггера для удаления записи из couriers при удалении роли ROLE_COURIER
+CREATE TRIGGER remove_courier_record
+    AFTER DELETE ON users_roles
+    FOR EACH ROW
+EXECUTE FUNCTION remove_courier_record_fn();
+
+File: 50-drop-users_roles-table.sql
+DROP TRIGGER IF EXISTS users_roles_set_timestamp ON users_roles;
+DROP TABLE IF EXISTS users_roles;
+
+File: 60-changeset-ingredients-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="7" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="60-create-ingredients-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="60-drop-ingredients-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 60-create-ingredients-table.sql
+create table if not exists ingredients
+(
+    id serial primary key,
+    name varchar(255) unique not null,
+    is_filter boolean default true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TRIGGER ingredients_set_timestamp
+    BEFORE UPDATE
+    ON ingredients
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 60-drop-ingredients-table.sql
+DROP TRIGGER IF EXISTS ingredients_set_timestamp ON ingredients;
+DROP TABLE IF EXISTS ingredients;
+
+File: 70-changeset-menu_items_ingredients-table.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="8" author="alyosander">
+        <sqlFile dbms="postgresql"
+                 encoding="utf8"
+                 relativeToChangelogFile="true"
+                 path="70-create-menu_items_ingredients-table.sql"
+                 splitStatements="true"
+                 stripComments="true"/>
+        <rollback>
+            <sqlFile path="70-drop-menu_items_ingredients-table.sql"
+                     dbms="postgresql"
+                     encoding="utf8"
+                     relativeToChangelogFile="true"
+                     splitStatements="true"
+                     stripComments="true"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
+
+File: 70-create-menu_items_ingredients-table.sql
+create table if not exists menu_items_ingredients
+(
+    ingredient_id bigint not null,
+    menu_item_id bigint not null,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    primary key (ingredient_id, menu_item_id),
+    foreign key (ingredient_id) references ingredients (id),
+    foreign key (menu_item_id) references menu_items (id) on delete cascade
+);
+
+CREATE TRIGGER menu_items_ingredients_set_timestamp
+    BEFORE UPDATE
+    ON menu_items_ingredients
+    FOR EACH ROW
+EXECUTE FUNCTION update_timestamp();
+
+File: 70-drop-menu_items_ingredients-table.sql
+DROP TRIGGER IF EXISTS menu_items_ingredients_set_timestamp ON menu_items_ingredients;
+DROP TABLE IF EXISTS menu_items_ingredients;
+
+File: db.changelog-v.1.0.0.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <include file="01-changeset-users-table.xml" relativeToChangelogFile="true"/>
+    <include file="10-changeset-restaurants-table.xml" relativeToChangelogFile="true"/>
+    <include file="15-changeset-couriers-table.xml" relativeToChangelogFile="true"/>
+    <include file="20-changeset-orders-table.xml" relativeToChangelogFile="true"/>
+    <include file="30-changeset-menu_items-table.xml" relativeToChangelogFile="true"/>
+    <include file="40-changeset-order_items-table.xml" relativeToChangelogFile="true"/>
+    <include file="50-changeset-users_roles-table.xml" relativeToChangelogFile="true"/>
+    <include file="60-changeset-ingredients-table.xml" relativeToChangelogFile="true"/>
+    <include file="70-changeset-menu_items_ingredients-table.xml" relativeToChangelogFile="true"/>
+
+</databaseChangeLog>
+

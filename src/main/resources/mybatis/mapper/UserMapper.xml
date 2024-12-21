@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.delivery.repository.UserRepository">
+    <resultMap id="UserWithOrdersResultMap" type="com.myapp.delivery.domain.user.User" autoMapping="false">
+        <id property="id" column="user_id"/>
+        <result property="name" column="user_name"/>
+        <result property="phone" column="user_phone"/>
+        <result property="username" column="user_username"/>
+        <result property="password" column="user_password"/>
+        <result property="address" column="user_address"/>
+        <result property="createdAt" column="user_created_at"/>
+        <result property="updatedAt" column="user_updated_at"/>
+        <collection property="roles"
+                    ofType="com.myapp.delivery.domain.user.Role"
+                    autoMapping="false">
+            <result property="name" column="user_role"/>
+        </collection>
+        <collection property="orders"
+                    ofType="com.myapp.delivery.domain.order.Order"
+                    resultMap="com.myapp.delivery.repository.OrderRepository.OrderRepositoryMap"
+                    autoMapping="false">
+        </collection>
+    </resultMap>
+
+    <resultMap id="UserWithoutOrdersResultMap" type="com.myapp.delivery.domain.user.User" autoMapping="false">
+        <id property="id" column="user_id"/>
+        <result property="name" column="user_name"/>
+        <result property="phone" column="user_phone"/>
+        <result property="username" column="user_username"/>
+        <result property="password" column="user_password"/>
+        <result property="address" column="user_address"/>
+        <result property="createdAt" column="user_created_at"/>
+        <result property="updatedAt" column="user_updated_at"/>
+        <collection property="roles"
+                    ofType="com.myapp.delivery.domain.user.Role"
+                    autoMapping="false">
+            <result property="name" column="user_role"/>
+        </collection>
+    </resultMap>
+
+    <select id="findWithOrdersById" resultMap="UserWithOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.password_hash AS user_password,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role,
+        o.id AS order_id,
+        o.order_date AS order_date,
+        o.status AS order_status
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        LEFT JOIN orders o ON u.id = o.user_id
+        WHERE u.id = #{id};
+    </select>
+
+    <select id="findWithoutOrdersByUsername" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.password_hash AS user_password,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE u.username = #{username};
+    </select>
+
+    <select id="findWithoutOrdersById" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.password_hash AS user_password,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE u.id = #{id};
+    </select>
+
+    <insert id="create" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        INSERT INTO users (
+        name,
+        phone,
+        username,
+        password_hash,
+        address,
+        created_at,
+        updated_at
+        ) VALUES (
+        #{name},
+        #{phone},
+        #{username},
+        #{password},
+        #{address},
+        CURRENT_TIMESTAMP,
+        CURRENT_TIMESTAMP
+        );
+    </insert>
+
+    <insert id="insertUserRole">
+        insert into users_roles (user_id, role)
+        values (#{userId}, #{role})
+    </insert>
+
+    <delete id="delete">
+        delete from users
+        where id = #{id}
+    </delete>
+</mapper>

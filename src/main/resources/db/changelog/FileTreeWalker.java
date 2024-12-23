@@ -11,7 +11,6 @@ public class FileTreeWalker {
     Path outputDir = Paths.get("tmp"); // Директория для записи результата
     Path outputFile = outputDir.resolve("res.txt"); // Файл результата
 
-    // Создаем директорию tmp, если она еще не существует
     try {
       Files.createDirectories(outputDir);
     } catch (IOException e) {

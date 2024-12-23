@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
@@ -73,15 +74,14 @@ public class ApplicationConfig {
                     .requestMatchers("/api/v1/auth/**").permitAll()
                     .anyRequest().authenticated()
             )
-//            .cors(cors -> cors.configurationSource(request -> {
-//              CorsConfiguration config = new CorsConfiguration();
-//              config.setAllowedOrigins(Arrays.asList("http://172.19.0.1:3000", "http://localhost:3000"));
-//              config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//              config.setAllowedHeaders(Arrays.asList("*"));
-//              config.setAllowCredentials(true);
-//              return config;
-//            }))
-            .cors(AbstractHttpConfigurer::disable)
+            .cors(cors -> cors.configurationSource(request -> {
+              CorsConfiguration config = new CorsConfiguration();
+              config.setAllowedOrigins(Arrays.asList("http://172.19.0.1:3000", "http://localhost:3000", "http://localhost:5173"));
+              config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+              config.setAllowedHeaders(Arrays.asList("*"));
+              config.setAllowCredentials(true);
+              return config;
+            }))
             .csrf(AbstractHttpConfigurer::disable)
             .httpBasic(AbstractHttpConfigurer::disable)
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

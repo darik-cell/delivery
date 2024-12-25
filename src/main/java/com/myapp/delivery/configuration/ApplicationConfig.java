@@ -76,7 +76,7 @@ public class ApplicationConfig {
             )
             .cors(cors -> cors.configurationSource(request -> {
               CorsConfiguration config = new CorsConfiguration();
-              config.setAllowedOrigins(Arrays.asList("http://172.19.0.1:3000", "http://localhost:3000", "http://localhost:5173"));
+              config.setAllowedOrigins(Arrays.asList("http://172.19.0.1:3000", "http://localhost:3000", "http://localhost:5199"));
               config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
               config.setAllowedHeaders(Arrays.asList("*"));
               config.setAllowCredentials(true);

@@ -20,4 +20,8 @@ public class UserDto {
   private String password;
 
   private String passwordConfirmation;
+
+  private String phone;
+
+  private String address;
 }

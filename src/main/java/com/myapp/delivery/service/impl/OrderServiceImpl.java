@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public List<Order> getAllActualUserOrdersByUserId(long id) {
-    List<Order> orders = orderRepository.findOrdersByCustomerId(id);
+    List<Order> orders = orderRepository.findActualOrdersByCustomerId(id);
     return orders;
   }
 

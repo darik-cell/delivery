@@ -46,7 +46,6 @@
         join menu_items_ingredients mii on mii.menu_item_id = menu_items.id
         join ingredients i on i.id = mii.ingredient_id
         WHERE menu_items.id = #{id}
-        LIMIT 1
     </select>
 
     <select id="findAll" resultMap="MenuItemResultMap" parameterType="java.lang.Long">

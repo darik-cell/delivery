@@ -1,5 +1,6 @@
 package com.myapp.delivery.configuration;
 
+import com.myapp.delivery.service.props.MinioProperties;
 import com.myapp.delivery.web.security.JwtTokenFilter;
 import com.myapp.delivery.web.security.JwtTokenProvider;
 import com.myapp.delivery.web.security.JwtUserDetailsService;
@@ -27,6 +28,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import io.minio.MinioClient;
 
 import java.util.Arrays;
 
@@ -39,10 +41,34 @@ public class ApplicationConfig {
   private final ApplicationContext applicationContext;
   private final JwtTokenProvider tokenProvider;
   private final JwtUserDetailsService jwtUserDetailsService;
+  private final MinioProperties minioProperties;
 
   @Bean
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public MinioClient minioClient() {
+    System.out.println(minioProperties.getUrl());
+    System.out.println(minioProperties.getAccessKey());
+    System.out.println(minioProperties.getSecretKey());
+
+    try {
+      MinioClient client = MinioClient.builder()
+              .endpoint(minioProperties.getUrl())
+              .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
+              .build();
+
+      // Пример запроса, который проверит доступность MinIO
+      client.listBuckets();  // Попытка получить список бакетов для теста соединения
+      System.out.println("Minio connection successful!");
+      return client;
+
+    } catch (Exception e) {
+      System.out.println("Minio connection failed: " + e.getMessage());
+      throw new RuntimeException("Failed to connect to MinIO", e);
+    }
   }
 
   @Bean

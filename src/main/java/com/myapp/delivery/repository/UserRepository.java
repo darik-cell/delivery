@@ -5,16 +5,20 @@ import com.myapp.delivery.domain.user.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
 public interface UserRepository {
   Optional<User> findWithOrdersById(Long id);
   Optional<User> findWithoutOrdersById(Long id);
+  Optional<User> findWithActualOrdersById(Long id);
+  List<User> findAllWithoutOrders();
 
   Optional<User> findWithoutOrdersByUsername(String username);
 
-  void update(User user);
+  void updateWithoutPassword(User user);
+  void updateWithPassword(User user);
 
   void create(User user);
 

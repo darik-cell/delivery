@@ -13,14 +13,24 @@ import java.util.List;
 
 @Data
 public class OrderDto {
+
   private Long id;
+
   private int customerId;
+
   private Status status;
+
   private BigDecimal totalPrice;
+
   private List<OrderItemDto> orderItems;
+
   private PaymentMethod paymentMethod;
+
   private PaymentStatus paymentStatus;
+
   private Timestamp orderTime;
+
   private String deliveryAddress;
+
   private Long courierId;
 }

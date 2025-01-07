@@ -17,7 +17,9 @@ public class Order {
   private int restaurantId;
   private Status status;
   private BigDecimal totalPrice;
+
   private List<OrderItem> orderItems;
+
   private PaymentMethod paymentMethod;
   private PaymentStatus paymentStatus;
   private Timestamp orderTime;

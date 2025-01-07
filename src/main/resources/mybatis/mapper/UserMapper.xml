@@ -4,27 +4,6 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.myapp.delivery.repository.UserRepository">
-    <resultMap id="UserWithOrdersResultMap" type="com.myapp.delivery.domain.user.User" autoMapping="false">
-        <id property="id" column="user_id"/>
-        <result property="name" column="user_name"/>
-        <result property="phone" column="user_phone"/>
-        <result property="username" column="user_username"/>
-        <result property="password" column="user_password"/>
-        <result property="address" column="user_address"/>
-        <result property="createdAt" column="user_created_at"/>
-        <result property="updatedAt" column="user_updated_at"/>
-        <collection property="roles"
-                    ofType="com.myapp.delivery.domain.user.Role"
-                    autoMapping="false">
-            <result property="name" column="user_role"/>
-        </collection>
-        <collection property="orders"
-                    ofType="com.myapp.delivery.domain.order.Order"
-                    resultMap="com.myapp.delivery.repository.OrderRepository.OrderRepositoryMap"
-                    autoMapping="false">
-        </collection>
-    </resultMap>
-
     <resultMap id="UserWithoutOrdersResultMap" type="com.myapp.delivery.domain.user.User" autoMapping="false">
         <id property="id" column="user_id"/>
         <result property="name" column="user_name"/>
@@ -41,27 +20,25 @@
         </collection>
     </resultMap>
 
-    <select id="findWithOrdersById" resultMap="UserWithOrdersResultMap">
-        SELECT
-        u.id AS user_id,
-        u.name AS user_name,
-        u.phone AS user_phone,
-        u.username AS user_username,
-        u.password_hash AS user_password,
-        u.address AS user_address,
-        u.created_at AS user_created_at,
-        u.updated_at AS user_updated_at,
-        r.role AS user_role,
-        o.id AS order_id,
-        o.order_date AS order_date,
-        o.status AS order_status
-        FROM users u
-        LEFT JOIN users_roles r ON u.id = r.user_id
-        LEFT JOIN orders o ON u.id = o.user_id
-        WHERE u.id = #{id};
-    </select>
+    <resultMap id="UserWithAllOrdersResultMap" type="com.myapp.delivery.domain.user.User" extends="UserWithoutOrdersResultMap" autoMapping="false">
+        <collection property="orders"
+                    ofType="com.myapp.delivery.domain.order.Order"
+                    select="com.myapp.delivery.repository.OrderRepository.findOrdersByCustomerId"
+                    column="user_id"
+                    autoMapping="false">
+        </collection>
+    </resultMap>
 
-    <select id="findWithoutOrdersByUsername" resultMap="UserWithoutOrdersResultMap">
+    <resultMap id="UserWithActualOrdersResultMap" type="com.myapp.delivery.domain.user.User" extends="UserWithoutOrdersResultMap" autoMapping="false">
+        <collection property="orders"
+                    ofType="com.myapp.delivery.domain.order.Order"
+                    select="com.myapp.delivery.repository.OrderRepository.findActualOrdersByCustomerId"
+                    column="user_id"
+                    autoMapping="false">
+        </collection>
+    </resultMap>
+
+    <select id="findWithOrdersById" resultMap="UserWithAllOrdersResultMap">
         SELECT
         u.id AS user_id,
         u.name AS user_name,
@@ -74,7 +51,52 @@
         r.role AS user_role
         FROM users u
         LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE u.id = #{id};
+    </select>
+
+    <select id="findWithActualOrdersById" resultMap="UserWithActualOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE u.id = #{id};
+    </select>
+
+    <select id="findWithoutOrdersByUsername" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.address AS user_address,
+        u.password_hash AS user_password,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
         WHERE u.username = #{username};
+    </select>
+
+    <select id="findAllWithoutOrders" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id;
     </select>
 
     <select id="findWithoutOrdersById" resultMap="UserWithoutOrdersResultMap">
@@ -83,7 +105,6 @@
         u.name AS user_name,
         u.phone AS user_phone,
         u.username AS user_username,
-        u.password_hash AS user_password,
         u.address AS user_address,
         u.created_at AS user_created_at,
         u.updated_at AS user_updated_at,
@@ -117,6 +138,29 @@
         insert into users_roles (user_id, role)
         values (#{userId}, #{role})
     </insert>
+
+    <update id="updateWithoutPassword">
+        UPDATE users
+        SET
+        name = #{name},
+        phone = #{phone},
+        username = #{username},
+        address = #{address},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id};
+    </update>
+
+    <update id="updateWithPassword">
+        UPDATE users
+        SET
+        name = #{name},
+        phone = #{phone},
+        username = #{username},
+        address = #{address},
+        password_hash = #{password},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id};
+    </update>
 
     <delete id="delete">
         delete from users

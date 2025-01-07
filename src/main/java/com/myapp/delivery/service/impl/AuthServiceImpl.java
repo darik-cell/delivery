@@ -12,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.util.logging.Logger;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -19,10 +21,12 @@ public class AuthServiceImpl implements AuthService {
   private final AuthenticationManager authenticationManager;
   private final UserService userService;
   private final JwtTokenProvider jwtTokenProvider;
+  private final Logger logger = Logger.getLogger(AuthServiceImpl.class.getName());
 
   @Override
   public JwtResponse login(JwtRequest loginRequest) {
     JwtResponse jwtResponse = new JwtResponse();
+    logger.info("loginRequest: " + loginRequest);
     authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
     User user = userService.getWithoutOrdersByUsername(loginRequest.getUsername())
             .orElseThrow(() -> new RuntimeException("User with username " + loginRequest.getUsername() + " not found"));

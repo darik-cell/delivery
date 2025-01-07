@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -34,17 +35,45 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public Optional<User> getWithActualOrdersById(long id) {
+    return userRepository.findWithActualOrdersById(id);
+  }
+
+  @Override
+  public List<User> getAllWithoutOrders() {
+    return userRepository.findAllWithoutOrders();
+  }
+
+
+  @Override
   public Optional<User> getWithoutOrdersByUsername(String username) {
     return userRepository.findWithoutOrdersByUsername(username);
   }
 
   @Override
-  public User update(User user) {
-    return null;
+  public User updateCustomerWithoutPassword(User user) {
+    if (userRepository.findWithoutOrdersByUsername(user.getUsername()).isEmpty()) {
+      throw new IllegalStateException("Пользователь не существует.");
+    }
+    userRepository.updateWithoutPassword(user);
+    return user;
   }
 
   @Override
-  public User create(User user) {
+  public User updateCustomerWithPassword(User user) {
+    if (userRepository.findWithoutOrdersByUsername(user.getUsername()).isEmpty()) {
+      throw new IllegalStateException("Пользователь не существует.");
+    }
+    if (!user.getPassword().equals(user.getPasswordConfirmation())) {
+      throw new IllegalStateException("Пароль не совпадает с подтверждением.");
+    }
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
+    userRepository.updateWithPassword(user);
+    return user;
+  }
+
+  @Override
+  public User createCustomer(User user) {
     logger.info("В начале метода create(): " + user.toString());
     if (userRepository.findWithoutOrdersByUsername(user.getUsername()).isPresent()) {
       throw new IllegalStateException("User already exists.");

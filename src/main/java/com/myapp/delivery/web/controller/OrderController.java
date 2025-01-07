@@ -48,7 +48,7 @@ public class OrderController {
   }
 
   @GetMapping("/user-actual/{id}")
-  public List<OrderDto> getOrders(@PathVariable Long id) {
+  public List<OrderDto> getUserAllActualOrders(@PathVariable Long id) {
     List<Order> res = orderService.getAllActualUserOrdersByUserId(id);
     return orderMapper.toOrderDto(res);
   }

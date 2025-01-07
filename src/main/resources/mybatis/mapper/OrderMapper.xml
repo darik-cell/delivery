@@ -47,6 +47,23 @@
         WHERE o.client_id = #{customerId}
     </select>
 
+    <select id="findAllOrders" resultMap="OrderResultMap">
+        SELECT
+        o.id AS order_id,
+        o.client_id AS order_client_id,
+        o.restaurant_id AS order_restaurant_id,
+        o.status AS order_status,
+        o.total_price AS order_total_price,
+        o.payment_method AS order_payment_method,
+        o.payment_status AS order_payment_status,
+        o.order_time AS order_order_time,
+        o.delivery_address AS order_delivery_address,
+        o.delivery_time AS order_delivery_time,
+        o.created_at AS order_created_at,
+        o.updated_at AS order_updated_at
+        FROM orders o
+    </select>
+
     <select id="findActualOrdersByCustomerId" resultMap="OrderResultMap">
         SELECT
         o.id AS order_id,

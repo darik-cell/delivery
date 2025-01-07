@@ -5,11 +5,13 @@ import com.myapp.delivery.service.OrderService;
 import com.myapp.delivery.web.dto.courier.CourierDto;
 import com.myapp.delivery.web.dto.order.OrderDto;
 import com.myapp.delivery.web.mapper.OrderMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Заказы-котроллер", description = "получить все/актуальные заказы пользователя, CRUD для заказов, изменить статус на готовится, получить все заказы")
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -40,6 +42,11 @@ public class OrderController {
     Order res = orderService.getOrderByOrderId(id)
             .orElseThrow(() -> new RuntimeException("нет такого order с таким id = " + id));
     return orderMapper.toOrderDto(res);
+  }
+
+  @GetMapping
+  public List<OrderDto> getAllOrders() {
+    return orderMapper.toOrderDto(orderService.getAllOrders());
   }
 
   @PutMapping("/{id}/prepare")

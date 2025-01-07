@@ -4,11 +4,13 @@ import com.myapp.delivery.domain.ingredient.Ingredient;
 import com.myapp.delivery.service.IngredientService;
 import com.myapp.delivery.web.dto.ingredient.IngredientDto;
 import com.myapp.delivery.web.mapper.IngredientMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Ингридиенты-контроллер", description = "получить все, изменить по id, удалить по id")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/ingredients")

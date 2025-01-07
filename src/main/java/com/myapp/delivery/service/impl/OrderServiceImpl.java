@@ -35,6 +35,11 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
+  public List<Order> getAllOrders() {
+    return orderRepository.findAllOrders();
+  }
+
+  @Override
   public boolean setOrderStatus(long id, String status) {
     orderRepository.setStatus(id, status);
     Optional<Order> order = orderRepository.findOrderById(id);

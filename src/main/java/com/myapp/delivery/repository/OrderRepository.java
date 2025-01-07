@@ -17,6 +17,7 @@ public interface OrderRepository {
   List<Order> findOrdersWithNoCourier();
   List<Order> findActualOrdersByCourierId(Long courierId);
   List<Order> findOnTheWayOrdersByCourierId(Long courierId);
+  List<Order> findAllOrders();
 
   void setStatus(@Param("id") Long id, @Param("status") String status);
 

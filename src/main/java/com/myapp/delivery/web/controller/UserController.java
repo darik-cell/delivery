@@ -6,11 +6,13 @@ import com.myapp.delivery.service.UserService;
 import com.myapp.delivery.web.dto.user.UserDto;
 import com.myapp.delivery.web.dto.user.UserWithOrdersDto;
 import com.myapp.delivery.web.mapper.UserMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Пользователь-контроллер", description = "получить данные пользователя без заказов/с всеми заказами/с актуальными заказами, получить всех пользователей, обновить данные пользователя, удалить пользователя")
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor

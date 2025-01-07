@@ -7,12 +7,14 @@ import com.myapp.delivery.web.dto.courier.CourierDto;
 import com.myapp.delivery.web.dto.order.OrderDto;
 import com.myapp.delivery.web.mapper.CourierMapper;
 import com.myapp.delivery.web.mapper.OrderMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+@Tag(name = "Курьеры-контроллер", description = "Получение курьеров на смене, на доставке и т.д., завершение заказов, завершение доставок, начало смены, текущие заказы курьера")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/couriers")

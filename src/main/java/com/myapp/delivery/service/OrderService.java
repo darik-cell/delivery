@@ -10,6 +10,7 @@ public interface OrderService {
   Optional<Order> getOrderByOrderId(long id);
   List<Order> getAllUserOrdersByUserId(long id);
   List<Order> getAllActualUserOrdersByUserId(long id);
+  List<Order> getAllOrders();
 
   boolean setOrderStatus(long id, String status);
   boolean setCourier(Long id, Long courierId);

@@ -8,6 +8,7 @@ import com.myapp.delivery.web.dto.menu_item.MenuItemDto;
 import com.myapp.delivery.web.dto.menu_item.MenuItemImageDto;
 import com.myapp.delivery.web.mapper.MenuItemImageMapper;
 import com.myapp.delivery.web.mapper.MenuItemMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.util.List;
 
+@Tag(name = "Меню-контроллер", description = "обновить, создать, получить блюдо, получить все блюда, загрузить изображение для блюда, получить изображение блюда")
 @RestController
 @RequestMapping("/api/v1/menuitems")
 @RequiredArgsConstructor

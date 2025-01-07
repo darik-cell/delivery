@@ -4,6 +4,11 @@ import com.myapp.delivery.service.props.MinioProperties;
 import com.myapp.delivery.web.security.JwtTokenFilter;
 import com.myapp.delivery.web.security.JwtTokenProvider;
 import com.myapp.delivery.web.security.JwtUserDetailsService;
+import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -72,6 +77,26 @@ public class ApplicationConfig {
   }
 
   @Bean
+  public OpenAPI openAPI() {
+    return new OpenAPI()
+            .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+            .components(
+                    new Components()
+                            .addSecuritySchemes("bearerAuth",
+                                    new SecurityScheme()
+                                            .type(SecurityScheme.Type.HTTP)
+                                            .scheme("bearer")
+                                            .bearerFormat("JWT")
+                            )
+            )
+            .info(new Info()
+                    .title("API приложения для доставок")
+                    .description("Веб-приложение для доставок, по предмету программная инженерия")
+                    .version("1.0")
+            );
+  }
+
+  @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
     return configuration.getAuthenticationManager();
   }
@@ -98,6 +123,8 @@ public class ApplicationConfig {
     return httpSecurity
             .authorizeHttpRequests((authz) -> authz
                     .requestMatchers("/api/v1/auth/**").permitAll()
+                    .requestMatchers("/swagger-ui/**").permitAll()
+                    .requestMatchers("/v3/api-docs/**").permitAll()
                     .anyRequest().authenticated()
             )
             .cors(cors -> cors.configurationSource(request -> {

@@ -9,6 +9,7 @@ import com.myapp.delivery.web.dto.auth.RefreshTokenRequest;
 import com.myapp.delivery.web.dto.user.UserDto;
 import com.myapp.delivery.web.dto.validation.OnCreate;
 import com.myapp.delivery.web.mapper.UserMapper;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.logging.Logger;
 
+@Tag(name = "Auth-controller", description = "Регистрация, логин и обновление токенов")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor

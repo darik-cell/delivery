@@ -84,8 +84,8 @@ public class UserServiceImpl implements UserService {
     userRepository.create(user);
     logger.info("После вызова userRepository.create(user): " + user);
     Set<Role> roles = switch (role) {
-      case ROLE_COURIER -> Set.of(Role.ROLE_COURIER, Role.ROLE_CUSTOMER);
-      case ROLE_MANAGER -> Set.of(Role.ROLE_MANAGER, Role.ROLE_CUSTOMER);
+      case ROLE_COURIER -> Set.of(Role.ROLE_COURIER);
+      case ROLE_MANAGER -> Set.of(Role.ROLE_MANAGER);
       default -> Set.of(Role.ROLE_CUSTOMER);
     };
     userRepository.insertUserRoles(user.getId(), roles);

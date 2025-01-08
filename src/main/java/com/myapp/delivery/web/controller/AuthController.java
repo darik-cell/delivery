@@ -1,5 +1,6 @@
 package com.myapp.delivery.web.controller;
 
+import com.myapp.delivery.domain.user.Role;
 import com.myapp.delivery.domain.user.User;
 import com.myapp.delivery.service.AuthService;
 import com.myapp.delivery.service.UserService;
@@ -41,7 +42,14 @@ public class AuthController implements AuthControllerApi {
   @PostMapping("/register")
   public UserDto register(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
     User user = userMapper.toUser(userDto);
-    User createdUser = userService.createCustomer(user);
+    User createdUser = userService.create(user, Role.ROLE_CUSTOMER);
+    return userMapper.fromUserToUserDto(createdUser);
+  }
+
+  @PostMapping("/register-for-admin")
+  public UserDto registerForAdmin(@Validated(OnCreate.class) @RequestBody UserDto userDto) {
+    User user = userMapper.toUser(userDto);
+    User createdUser = userService.create(user, userDto.getRoles().iterator().next());
     return userMapper.fromUserToUserDto(createdUser);
   }
 

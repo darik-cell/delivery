@@ -100,6 +100,14 @@
         WHERE id = #{id}
     </update>
 
+    <update id="updateMenuItemImage">
+        UPDATE menu_items
+        SET
+        image_url = #{imageUrl},
+        updated_at = CURRENT_TIMESTAMP
+        WHERE id = #{id}
+    </update>
+
     <update id="updateMenuItemIngredients">
         delete from menu_items_ingredients where menu_item_id = #{menuItemId};
 

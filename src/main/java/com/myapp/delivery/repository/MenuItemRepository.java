@@ -17,7 +17,10 @@ public interface MenuItemRepository {
 
   void insertMenuItem(MenuItem menuItem);
   void insertMenuItemIngredients(@Param("ingredients") Set<Ingredient> ingredients, @Param("menuItemId") long menuItemId);
+
+  void updateMenuItemImage(MenuItem menuItem);
   void updateMenuItem(MenuItem menuItem);
   void updateMenuItemIngredients(@Param("ingredients") Set<Ingredient> ingredients, @Param("menuItemId") long menuItemId);
+
   void delete(Long id);
 }

@@ -1,5 +1,6 @@
 package com.myapp.delivery.service;
 
+import com.myapp.delivery.domain.user.Role;
 import com.myapp.delivery.domain.user.User;
 
 import javax.swing.text.html.Option;
@@ -17,7 +18,7 @@ public interface UserService {
   User updateCustomerWithoutPassword(User user);
   User updateCustomerWithPassword(User user);
 
-  User createCustomer(User user);
+  User create(User user, Role role);
 
   void delete(long id);
 }

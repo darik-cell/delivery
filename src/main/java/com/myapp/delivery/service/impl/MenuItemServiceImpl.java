@@ -6,20 +6,23 @@ import com.myapp.delivery.repository.MenuItemRepository;
 import com.myapp.delivery.service.ImageService;
 import com.myapp.delivery.service.MenuItemService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MenuItemServiceImpl implements MenuItemService {
 
   private final MenuItemRepository menuItemRepository;
   private final ImageService imageService;
-
+  private final Logger logger = Logger.getLogger(MenuItemServiceImpl.class.getName());
 
   @Override
   public Optional<MenuItem> findById(Long id) {
@@ -57,13 +60,15 @@ public class MenuItemServiceImpl implements MenuItemService {
     MenuItem menuItem = menuItemRepository.findById(id).get();
     String fileName = imageService.upload(image);
     menuItem.setImageUrl(fileName);
-    menuItemRepository.updateMenuItem(menuItem);
+    menuItemRepository.updateMenuItemImage(menuItem);
   }
 
   @Override
   public InputStream getImage(Long id) {
     MenuItem menuItem = menuItemRepository.findById(id).get();
+    logger.info(menuItem.toString());
     String imageUrl = menuItem.getImageUrl();
+    logger.info("imageUrl:" + imageUrl);
     return imageService.getImage(imageUrl);
   }
 }

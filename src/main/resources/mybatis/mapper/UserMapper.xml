@@ -134,9 +134,12 @@
         );
     </insert>
 
-    <insert id="insertUserRole">
+    <insert id="insertUserRoles">
         insert into users_roles (user_id, role)
-        values (#{userId}, #{role})
+        values
+        <foreach collection="roles" item="role" separator=",">
+            (#{userId}, #{role})
+        </foreach>
     </insert>
 
     <update id="updateWithoutPassword">

@@ -44,7 +44,6 @@ public class UserServiceImpl implements UserService {
     return userRepository.findAllWithoutOrders();
   }
 
-
   @Override
   public Optional<User> getWithoutOrdersByUsername(String username) {
     return userRepository.findWithoutOrdersByUsername(username);
@@ -73,7 +72,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public User createCustomer(User user) {
+  public User create(User user, Role role) {
     logger.info("В начале метода create(): " + user.toString());
     if (userRepository.findWithoutOrdersByUsername(user.getUsername()).isPresent()) {
       throw new IllegalStateException("User already exists.");
@@ -84,8 +83,12 @@ public class UserServiceImpl implements UserService {
     user.setPassword(passwordEncoder.encode(user.getPassword()));
     userRepository.create(user);
     logger.info("После вызова userRepository.create(user): " + user);
-    Set<Role> roles = Set.of(Role.ROLE_CUSTOMER);
-    userRepository.insertUserRole(user.getId(), Role.ROLE_CUSTOMER);
+    Set<Role> roles = switch (role) {
+      case ROLE_COURIER -> Set.of(Role.ROLE_COURIER, Role.ROLE_CUSTOMER);
+      case ROLE_MANAGER -> Set.of(Role.ROLE_MANAGER, Role.ROLE_CUSTOMER);
+      default -> Set.of(Role.ROLE_CUSTOMER);
+    };
+    userRepository.insertUserRoles(user.getId(), roles);
     user.setRoles(roles);
     return user;
   }

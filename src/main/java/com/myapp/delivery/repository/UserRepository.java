@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Mapper
 public interface UserRepository {
@@ -22,7 +23,7 @@ public interface UserRepository {
 
   void create(User user);
 
-  void insertUserRole(@Param("userId") long userId, @Param("role") Role role);
+  void insertUserRoles(@Param("userId") long userId, @Param("roles") Set<Role> roles);
 
   void delete(long id);
 }

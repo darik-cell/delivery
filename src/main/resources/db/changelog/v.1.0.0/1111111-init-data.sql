@@ -16,7 +16,13 @@ VALUES ('Иван Иванов', '79991234567', 'admin', '$2a$10$RNk3wb3ZC1AnjaC
        ('Сергей Сергеев', '79993334455', 'manager', '$2a$10$RNk3wb3ZC1AnjaCMpukYueoddWjdr2zu54TKG6z0XVo4jDYgXAgKa',
         'Адрес менеджера'),
        ('Алексей Алексеев', '79994445566', 'customer', '$2a$10$RNk3wb3ZC1AnjaCMpukYueoddWjdr2zu54TKG6z0XVo4jDYgXAgKa',
-        'Адрес клиента');
+        'Адрес клиента'),
+       ('Курьер на смене', '79998887766', 'courier_on_shift',
+        '$2a$10$RNk3wb3ZC1AnjaCMpukYueoddWjdr2zu54TKG6z0XVo4jDYgXAgKa',
+        'Адрес курьера на смене'),
+       ('Курьер на смене и на доставке', '79997778899', 'courier_on_shift_on_delivery',
+        '$2a$10$RNk3wb3ZC1AnjaCMpukYueoddWjdr2zu54TKG6z0XVo4jDYgXAgKa',
+        'Адрес курьера на смене и на доставке');
 
 -- Предполагаем, что:
 -- admin имеет id=1,
@@ -29,7 +35,18 @@ INSERT INTO users_roles (user_id, role)
 VALUES (1, 'ROLE_ADMIN'),
        (2, 'ROLE_COURIER'), -- Эта вставка сгенерирует запись в couriers
        (3, 'ROLE_MANAGER'),
-       (4, 'ROLE_CUSTOMER');
+       (4, 'ROLE_CUSTOMER'),
+       (5, 'ROLE_COURIER'),
+       (6, 'ROLE_COURIER'); -- Эта вставка сгенерирует запись в couriers
+
+update couriers
+set is_on_shift = true
+where user_id = 5;
+
+update couriers
+set is_on_shift = true,
+    is_on_delivery = true
+where user_id = 6;
 
 -- Вставка ингредиентов
 INSERT INTO ingredients (name, is_filter)

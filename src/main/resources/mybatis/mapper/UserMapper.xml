@@ -99,6 +99,51 @@
         LEFT JOIN users_roles r ON u.id = r.user_id;
     </select>
 
+    <select id="findAllCustomersWithoutOrders" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE r.role = 'ROLE_CUSTOMER';
+    </select>
+
+    <select id="findAllCouriersWithoutOrders" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE r.role = 'ROLE_COURIER';
+    </select>
+
+    <select id="findAllManagersWithoutOrders" resultMap="UserWithoutOrdersResultMap">
+        SELECT
+        u.id AS user_id,
+        u.name AS user_name,
+        u.phone AS user_phone,
+        u.username AS user_username,
+        u.address AS user_address,
+        u.created_at AS user_created_at,
+        u.updated_at AS user_updated_at,
+        r.role AS user_role
+        FROM users u
+        LEFT JOIN users_roles r ON u.id = r.user_id
+        WHERE r.role = 'ROLE_MANAGER';
+    </select>
+
     <select id="findWithoutOrdersById" resultMap="UserWithoutOrdersResultMap">
         SELECT
         u.id AS user_id,

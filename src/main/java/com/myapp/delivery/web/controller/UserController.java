@@ -37,6 +37,21 @@ public class UserController implements UserControllerApi {
         return userMapper.fromUserToUserDto(userService.getAllWithoutOrders());
     }
 
+    @GetMapping("/customers")
+    public List<UserDto> getAllCustomersWithoutOrders() {
+        return userMapper.fromUserToUserDto(userService.getAllCustomersWithoutOrders());
+    }
+
+    @GetMapping("/couriers")
+    public List<UserDto> getAllCouriersWithoutOrders() {
+        return userMapper.fromUserToUserDto(userService.getAllCouriersWithoutOrders());
+    }
+
+    @GetMapping("/managers")
+    public List<UserDto> getAllManagersWithoutOrders() {
+        return userMapper.fromUserToUserDto(userService.getAllManagersWithoutOrders());
+    }
+
     @Override
     @PutMapping("/{id}")
     public UserDto updateUserById(

@@ -12,6 +12,9 @@ public interface UserService {
   Optional<User> getWithoutOrdersById(long id);
   Optional<User> getWithActualOrdersById(long id);
   List<User> getAllWithoutOrders();
+  List<User> getAllCustomersWithoutOrders();
+  List<User> getAllCouriersWithoutOrders();
+  List<User> getAllManagersWithoutOrders();
 
   Optional<User> getWithoutOrdersByUsername(String username);
 

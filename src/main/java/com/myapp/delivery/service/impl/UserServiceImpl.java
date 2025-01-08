@@ -45,6 +45,21 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
+  public List<User> getAllCustomersWithoutOrders() {
+    return userRepository.findAllCustomersWithoutOrders();
+  }
+
+  @Override
+  public List<User> getAllCouriersWithoutOrders() {
+    return userRepository.findAllCouriersWithoutOrders();
+  }
+
+  @Override
+  public List<User> getAllManagersWithoutOrders() {
+    return userRepository.findAllManagersWithoutOrders();
+  }
+
+  @Override
   public Optional<User> getWithoutOrdersByUsername(String username) {
     return userRepository.findWithoutOrdersByUsername(username);
   }

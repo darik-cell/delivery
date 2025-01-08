@@ -15,6 +15,9 @@ public interface UserRepository {
   Optional<User> findWithoutOrdersById(Long id);
   Optional<User> findWithActualOrdersById(Long id);
   List<User> findAllWithoutOrders();
+  List<User> findAllCustomersWithoutOrders();
+  List<User> findAllManagersWithoutOrders();
+  List<User> findAllCouriersWithoutOrders();
 
   Optional<User> findWithoutOrdersByUsername(String username);
 

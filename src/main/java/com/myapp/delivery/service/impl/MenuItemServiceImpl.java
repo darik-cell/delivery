@@ -41,6 +41,7 @@ public class MenuItemServiceImpl implements MenuItemService {
 
   @Override
   public MenuItem update(MenuItem menuItem) {
+    menuItem.setRestaurantId(1L);
     menuItemRepository.updateMenuItem(menuItem);
     menuItemRepository.updateMenuItemIngredients(menuItem.getIngredients(), menuItem.getId());
     return menuItem;

@@ -71,9 +71,9 @@
 
     <!-- SQL query to create a new MenuItem -->
     <insert id="insertMenuItem" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO menu_items (restaurant_id, name, description, price, category, image_url, availability_status,
+        INSERT INTO menu_items (restaurant_id, name, description, price, category, availability_status,
         calories, weight, created_at, updated_at)
-        VALUES (#{restaurantId}, #{name}, #{description}, #{price}, #{category.dbValue}, #{imageUrl},
+        VALUES (#{restaurantId}, #{name}, #{description}, #{price}, #{category.dbValue},
         #{availabilityStatus}, #{calories}, #{weight}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 
@@ -93,7 +93,6 @@
         description = #{description},
         price = #{price},
         category = #{category.dbValue},
-        image_url = #{imageUrl},
         availability_status = #{availabilityStatus},
         calories = #{calories},
         weight = #{weight},

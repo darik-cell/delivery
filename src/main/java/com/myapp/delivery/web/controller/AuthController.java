@@ -3,12 +3,14 @@ package com.myapp.delivery.web.controller;
 import com.myapp.delivery.domain.user.User;
 import com.myapp.delivery.service.AuthService;
 import com.myapp.delivery.service.UserService;
+import com.myapp.delivery.web.controller.swagger.AuthControllerApi;
 import com.myapp.delivery.web.dto.auth.JwtRequest;
 import com.myapp.delivery.web.dto.auth.JwtResponse;
 import com.myapp.delivery.web.dto.auth.RefreshTokenRequest;
 import com.myapp.delivery.web.dto.user.UserDto;
 import com.myapp.delivery.web.dto.validation.OnCreate;
 import com.myapp.delivery.web.mapper.UserMapper;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -19,12 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.logging.Logger;
 
-@Tag(name = "Auth-controller", description = "Регистрация, логин и обновление токенов")
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
 @Validated
-public class AuthController {
+public class AuthController implements AuthControllerApi {
 
   private final AuthService authService;
   private final UserService userService;

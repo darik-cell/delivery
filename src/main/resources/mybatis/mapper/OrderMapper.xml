@@ -164,7 +164,6 @@
         INSERT INTO orders (
         client_id,
         restaurant_id,
-        status,
         total_price,
         payment_method,
         payment_status,
@@ -175,7 +174,6 @@
         VALUES (
         #{customerId},
         #{restaurantId},
-        #{status},
         #{totalPrice},
         #{paymentMethod},
         #{paymentStatus},
@@ -208,9 +206,5 @@
         SET courier_id = #{courierId}
         WHERE id = #{id}
     </update>
-
-    <delete id="delete">
-        DELETE FROM order_items WHERE id = #{id}
-    </delete>
 
 </mapper>

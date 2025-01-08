@@ -53,11 +53,6 @@ public class OrderServiceImpl implements OrderService {
   }
 
   @Override
-  public Order update(Order order) {
-    return null;
-  }
-
-  @Override
   public Order create(Order order) {
     order.setRestaurantId(1);
     orderRepository.create(order);
@@ -66,10 +61,5 @@ public class OrderServiceImpl implements OrderService {
     }
     orderItemRepository.createOrderItems(order.getOrderItems());
     return order;
-  }
-
-  @Override
-  public void delete(long id) {
-
   }
 }

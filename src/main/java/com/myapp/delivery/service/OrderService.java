@@ -15,10 +15,5 @@ public interface OrderService {
   boolean setOrderStatus(long id, String status);
   boolean setCourier(Long id, Long courierId);
 
-
-  Order update(Order order);
-
   Order create(Order order);
-
-  void delete(long id);
 }

@@ -4,8 +4,10 @@ import com.myapp.delivery.domain.courier.Courier;
 import com.myapp.delivery.domain.order.Order;
 import com.myapp.delivery.domain.order.PaymentStatus;
 import com.myapp.delivery.domain.order.Status;
+import com.myapp.delivery.domain.user.User;
 import com.myapp.delivery.repository.CourierRepository;
 import com.myapp.delivery.repository.OrderRepository;
+import com.myapp.delivery.repository.UserRepository;
 import com.myapp.delivery.service.CourierService;
 import com.myapp.delivery.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class CourierServiceImpl implements CourierService {
 
   private final CourierRepository courierRepository;
+  private final UserRepository userRepository;
   private final OrderRepository orderRepository;
   private final OrderService orderService;
 
@@ -30,24 +33,38 @@ public class CourierServiceImpl implements CourierService {
 
   @Override
   public List<Courier> getAllCouriersOnShift() {
-    return courierRepository.findAllOnShift();
+    List<Courier> couriers = courierRepository.findAllOnShift();
+    couriers.forEach(cur -> {
+      User user = userRepository.findWithoutOrdersById(cur.getUserId()).get();
+      cur.setName(user.getName());
+      cur.setPhone(user.getPhone());
+    });
+    return couriers;
   }
 
   @Override
   public List<Courier> getAllCouriersNotOnDelivery() {
-    return courierRepository.findAllNotOnDelivery();
+    List<Courier> couriers = courierRepository.findAllNotOnDelivery();
+    couriers.forEach(cur -> {
+      User user = userRepository.findWithoutOrdersById(cur.getUserId()).get();
+      cur.setName(user.getName());
+      cur.setPhone(user.getPhone());
+    });
+    return couriers;
   }
 
   @Override
   public boolean takeOrderToCourier(Long orderId, Long courierId) {
-    return orderService.setCourier(orderId, courierId) && orderService.setOrderStatus(orderId, "назначен курьер");
+    return orderService.setCourier(orderId, courierId)
+            && orderService.setOrderStatus(orderId, "назначен курьер");
   }
 
   @Override
   public boolean goDelivery(Long courierId) {
     List<Order> orders = orderRepository.findActualOrdersByCourierId(courierId);
     int count = orders.size();
-    orders = orders.stream().filter(o -> orderService.setOrderStatus(o.getId(), "в пути")).toList();
+    orders = orders.stream().filter(o ->
+            orderService.setOrderStatus(o.getId(), "в пути")).toList();
     if (orders.size() != count) {
       throw new RuntimeException("Что-то не так с методом goDelivery");
     }

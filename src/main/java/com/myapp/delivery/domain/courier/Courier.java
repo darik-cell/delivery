@@ -8,6 +8,8 @@ import java.sql.Timestamp;
 public class Courier {
 
   private long userId;
+  private String name;
+  private String phone;
   private boolean isOnShift;
   private boolean isOnDelivery;
   private Timestamp lastShiftStart;

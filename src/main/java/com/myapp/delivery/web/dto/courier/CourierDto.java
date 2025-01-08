@@ -15,6 +15,12 @@ public class CourierDto {
   @Schema(description = "Уникальный идентификатор", example = "1")
   private long userId;
 
+  @Schema(description = "Имя курьера", example = "Иванов Иван")
+  private String name;
+
+  @Schema(description = "Номер телефона курьера", example = "89007654321")
+  private String phone;
+
   @Schema(description = "Флаг для обозначения рабочаяя смена ли сейчас", example = "true")
   private boolean isOnShift;
 

@@ -26,6 +26,26 @@ public class CourierServiceImpl implements CourierService {
   private final OrderRepository orderRepository;
   private final OrderService orderService;
 
+  public boolean goShift(Long courierId) {
+    List<Order> orders = orderRepository.findActualOrdersByCourierId(courierId);
+    if (!orders.isEmpty()) {
+      return false;
+    }
+    courierRepository.setOnShift(courierId);
+    Courier courier = courierRepository.findById(courierId).get();
+    return courier.isOnShift();
+  }
+
+  public boolean endShift(Long courierId) {
+    List<Order> orders = orderRepository.findActualOrdersByCourierId(courierId);
+    if (!orders.isEmpty()) {
+      return false;
+    }
+    courierRepository.setNotOnShift(courierId);
+    Courier courier = courierRepository.findById(courierId).get();
+    return !courier.isOnShift();
+  }
+
   @Override
   public List<Order> getCourierActualOrders(Long courierId) {
     return orderRepository.findActualOrdersByCourierId(courierId);
@@ -51,6 +71,14 @@ public class CourierServiceImpl implements CourierService {
       cur.setPhone(user.getPhone());
     });
     return couriers;
+  }
+
+  public Courier getCourierById(Long courierId) {
+    Courier courier = courierRepository.findById(courierId).get();
+    User user = userRepository.findWithoutOrdersById(courierId).get();
+    courier.setName(user.getName());
+    courier.setPhone(user.getPhone());
+    return courier;
   }
 
   @Override
@@ -87,8 +115,8 @@ public class CourierServiceImpl implements CourierService {
 
     return newOrder.filter(o ->
             o.getStatus().getDbValue().equals("доставлен") &&
-            o.getDeliveryTime().equals(now) &&
-            o.getPaymentStatus().equals(PaymentStatus.PAID)).isPresent();
+                    o.getDeliveryTime().equals(now) &&
+                    o.getPaymentStatus().equals(PaymentStatus.PAID)).isPresent();
   }
 
   @Override

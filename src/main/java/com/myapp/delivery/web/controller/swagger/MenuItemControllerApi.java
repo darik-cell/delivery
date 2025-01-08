@@ -30,6 +30,7 @@ public interface MenuItemControllerApi {
                                           summary = "Ингридиенты кратко",
                                           value = """
                             {
+                                "id": 1, 
                                 "name": "Борщ",
                                 "description": "Классическое блюдо русской кухни",
                                 "price": 100,
@@ -50,6 +51,7 @@ public interface MenuItemControllerApi {
                                           summary = "Ингридиенты с названием",
                                           value = """
                             {
+                                "id": 1,
                                 "name": "Борщ",
                                 "description": "Классическое блюдо русской кухни",
                                 "price": 100,

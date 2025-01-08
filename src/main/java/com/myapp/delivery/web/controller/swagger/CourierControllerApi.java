@@ -36,4 +36,9 @@ public interface CourierControllerApi {
           summary = "Закончить доставку для курьера, чтобы можно было брать заказы дальше"
   )
   public boolean endDelivery(@Parameter(description = "id курьера") Long courierId);
+
+  @Operation(
+          summary = "Получить данные курьера по id"
+  )
+  public CourierDto getById(@Parameter(description = "id курьера") Long courierId);
 }

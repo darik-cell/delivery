@@ -25,6 +25,11 @@ public class CourierController implements CourierControllerApi {
     return courierMapper.toDto(courierService.getAllCouriersOnShift());
   }
 
+  @GetMapping("/{courierId}")
+  public CourierDto getById(@PathVariable Long courierId) {
+    return courierMapper.toDto(courierService.getCourierById(courierId));
+  }
+
   @GetMapping("/all-on-shift-and-not-on-delivery")
   public List<CourierDto> getAllNotOnDelivery() {
     return courierMapper.toDto(courierService.getAllCouriersNotOnDelivery());
@@ -35,16 +40,6 @@ public class CourierController implements CourierControllerApi {
     return orderMapper.toOrderDto(courierService.getCourierActualOrders(courierId));
   }
 
-//  @PutMapping("/{courierId}/take-order")
-//  public boolean takeOrder(@PathVariable Long courierId, @RequestBody OrderDto orderDto) {
-//    return courierService.takeOrderToCourier(orderDto.getId(), courierId);
-//  }
-
-//  @PutMapping("/{courierId}/go-delivery")
-//  public boolean goDelivery(@PathVariable Long courierId) {
-//    return courierService.goDelivery(courierId);
-//  }
-
   @PutMapping("/{courierId}/end-order")
   public boolean endOrder(@PathVariable Long courierId, @RequestBody OrderDto orderDto) {
     return courierService.endOrder(courierId, orderDto.getId());
@@ -53,5 +48,15 @@ public class CourierController implements CourierControllerApi {
   @PutMapping("/{courierId}/end-delivery")
   public boolean endDelivery(@PathVariable Long courierId) {
     return courierService.endDelivery(courierId);
+  }
+
+  @PutMapping("/{courierId}/end-shift")
+  public boolean endShift(@PathVariable Long courierId) {
+    return courierService.endShift(courierId);
+  }
+
+  @PutMapping("/{courierId}/start-shift")
+  public boolean startShift(@PathVariable Long courierId) {
+    return courierService.goShift(courierId);
   }
 }

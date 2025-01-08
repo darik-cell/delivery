@@ -10,9 +10,15 @@ public interface CourierService {
   List<Order> getCourierActualOrders(Long courierId);
   List<Courier> getAllCouriersOnShift();
   List<Courier> getAllCouriersNotOnDelivery();
+  public Courier getCourierById(Long courierId);
 
   boolean takeOrderToCourier(Long orderId, Long courierId);
-  boolean goDelivery(Long courierId);
   boolean endOrder(Long courierId, Long orderId);
+
+  boolean goDelivery(Long courierId);
   boolean endDelivery(Long courierId);
+
+
+  boolean goShift(Long courierId);
+  boolean endShift(Long courierId);
 }

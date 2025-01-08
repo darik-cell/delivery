@@ -25,6 +25,22 @@ public interface UserControllerApi {
   )
   List<UserDto> getAllUsersWithoutOrders();
 
+
+  @Operation(
+          summary = "Получить всех клиентов (customer)"
+  )
+  public List<UserDto> getAllCustomersWithoutOrders();
+
+  @Operation(
+          summary = "Получить всех курьеров"
+  )
+  public List<UserDto> getAllCouriersWithoutOrders();
+
+  @Operation(
+          summary = "Получить всех менеджеров"
+  )
+  public List<UserDto> getAllManagersWithoutOrders();
+
   @Operation(
           summary = "Обновить клиента",
           description = "Можно передать без пароля, либо с паролем и подтверждением пароля, в любом случае отработает",

@@ -75,7 +75,7 @@ public interface OrderControllerApi {
   List<OrderDto> getUserAllActualOrders(@Parameter(description = "id клиента") Long id);
 
   @Operation(
-          summary = "Получить вообще все заказы (которые отменены и доставлены тоже)"
+          summary = "Получить вообще все заказы (которые отменены и доставлены тоже) для клиента, по id клиента"
   )
   List<OrderDto> getAllOrdersForUser(@Parameter(description = "id клиента") Long id);
 }

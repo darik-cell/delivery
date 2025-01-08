@@ -16,7 +16,6 @@
                 typeHandler="com.myapp.delivery.repository.PaymentMethodTypeHandler"/>
         <result property="paymentStatus" column="order_payment_status"
                 typeHandler="com.myapp.delivery.repository.PaymentStatusTypeHandler"/>
-        <result property="orderTime" column="order_order_time"/>
         <result property="deliveryAddress" column="order_delivery_address"/>
         <result property="deliveryTime" column="order_delivery_time"/>
         <result property="createdAt" column="order_created_at"/>
@@ -38,11 +37,11 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
-        o.updated_at AS order_updated_at
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
         FROM orders o
         WHERE o.client_id = #{customerId}
     </select>
@@ -56,11 +55,11 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
-        o.updated_at AS order_updated_at
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
         FROM orders o
     </select>
 
@@ -73,11 +72,11 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
-        o.updated_at AS order_updated_at
+        o.updated_at AS order_updated_at,
+        o.courier_id AS order_courier_id
         FROM orders o
         WHERE o.client_id = #{customerId}
         AND o.status in ('в обработке', 'готовится', 'назначен курьер', 'в пути')
@@ -92,7 +91,6 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
@@ -111,7 +109,6 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
@@ -130,7 +127,6 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
@@ -149,7 +145,6 @@
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
-        o.order_time AS order_order_time,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
         o.created_at AS order_created_at,
@@ -167,9 +162,7 @@
         total_price,
         payment_method,
         payment_status,
-        order_time,
-        delivery_address,
-        delivery_time
+        delivery_address
         )
         VALUES (
         #{customerId},
@@ -177,9 +170,7 @@
         #{totalPrice},
         #{paymentMethod},
         #{paymentStatus},
-        #{orderTime},
-        #{deliveryAddress},
-        #{deliveryTime}
+        #{deliveryAddress}
         )
     </insert>
 

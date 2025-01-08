@@ -19,7 +19,7 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   public Optional<Order> getOrderByOrderId(long id) {
-    return Optional.empty();
+    return orderRepository.findOrderById(id);
   }
 
   @Override
@@ -60,6 +60,7 @@ public class OrderServiceImpl implements OrderService {
       orderItem.setOrderId(order.getId());
     }
     orderItemRepository.createOrderItems(order.getOrderItems());
+    order = orderRepository.findOrderById(order.getId()).get();
     return order;
   }
 }

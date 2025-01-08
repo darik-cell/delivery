@@ -39,11 +39,14 @@ public class OrderDto {
   private PaymentStatus paymentStatus;
 
   @Schema(description = "Время, когда курьер доставил")
-  private Timestamp orderTime;
+  private String deliveryTime;
 
   @Schema(description = "Адрес доставки", example = "Московское шоссе 34б")
   private String deliveryAddress;
 
   @Schema(description = "Уникальный идентификатор курьера", example = "2")
   private Long courierId;
+
+  @Schema(description = "Время создания заказа")
+  private String createdAt;
 }

@@ -22,7 +22,6 @@ public class Order {
 
   private PaymentMethod paymentMethod;
   private PaymentStatus paymentStatus;
-  private Timestamp orderTime;
   private String deliveryAddress;
   private Timestamp deliveryTime;
   private Timestamp createdAt;

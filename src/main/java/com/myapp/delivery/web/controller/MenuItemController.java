@@ -60,8 +60,13 @@ public class MenuItemController implements MenuItemControllerApi {
   }
 
   @GetMapping
-  public List<MenuItemDto> getMenuItems() {
-    return menuItemMapper.toDto(menuItemService.findAll());
+  public List<MenuItemDto> getAvailableMenuItems() {
+    return menuItemMapper.toDto(menuItemService.findAllAvailable());
+  }
+
+  @GetMapping("/archive")
+  public List<MenuItemDto> getArchiveMenuItems() {
+    return menuItemMapper.toDto(menuItemService.findAllArchive());
   }
 
   @PostMapping("/{id}/image")

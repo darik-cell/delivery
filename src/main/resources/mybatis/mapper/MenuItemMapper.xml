@@ -48,6 +48,51 @@
         WHERE menu_items.id = #{id}
     </select>
 
+    <select id="findAllAvailable" resultMap="MenuItemResultMap" parameterType="java.lang.Long">
+        SELECT
+        menu_items.id AS menu_item_id,
+        menu_items.restaurant_id AS menu_item_restaurant_id,
+        menu_items.name AS menu_item_name,
+        menu_items.description AS menu_item_description,
+        menu_items.price AS menu_item_price,
+        menu_items.category AS menu_item_category,
+        menu_items.image_url AS menu_item_image_url,
+        menu_items.availability_status AS menu_item_availability_status,
+        menu_items.calories as menu_item_calories,
+        menu_items.weight as menu_item_weight,
+        menu_items.created_at AS menu_item_created_at,
+        menu_items.updated_at AS menu_item_updated_at,
+        i.id as ingredient_id,
+        i.name as ingredient_name
+        FROM menu_items
+        join menu_items_ingredients mii on mii.menu_item_id = menu_items.id
+        join ingredients i on i.id = mii.ingredient_id
+        where menu_items.availability_status = true
+    </select>
+
+    <select id="findAllArchive" resultMap="MenuItemResultMap" parameterType="java.lang.Long">
+        SELECT
+        menu_items.id AS menu_item_id,
+        menu_items.restaurant_id AS menu_item_restaurant_id,
+        menu_items.name AS menu_item_name,
+        menu_items.description AS menu_item_description,
+        menu_items.price AS menu_item_price,
+        menu_items.category AS menu_item_category,
+        menu_items.image_url AS menu_item_image_url,
+        menu_items.availability_status AS menu_item_availability_status,
+        menu_items.calories as menu_item_calories,
+        menu_items.weight as menu_item_weight,
+        menu_items.created_at AS menu_item_created_at,
+        menu_items.updated_at AS menu_item_updated_at,
+        i.id as ingredient_id,
+        i.name as ingredient_name
+        FROM menu_items
+        join menu_items_ingredients mii on mii.menu_item_id = menu_items.id
+        join ingredients i on i.id = mii.ingredient_id
+        where menu_items.availability_status = false
+    </select>
+
+
     <select id="findAll" resultMap="MenuItemResultMap" parameterType="java.lang.Long">
         SELECT
         menu_items.id AS menu_item_id,
@@ -67,6 +112,7 @@
         FROM menu_items
         join menu_items_ingredients mii on mii.menu_item_id = menu_items.id
         join ingredients i on i.id = mii.ingredient_id
+        where menu_items.availability_status = true
     </select>
 
     <!-- SQL query to create a new MenuItem -->
@@ -118,8 +164,11 @@
     </update>
 
     <!-- SQL query to delete a MenuItem -->
-    <delete id="delete">
-        DELETE FROM menu_items WHERE id = #{id}
-    </delete>
+    <update id="delete">
+        UPDATE menu_items
+        SET
+        availability_status = false
+        WHERE id = #{id}
+    </update>
 
 </mapper>

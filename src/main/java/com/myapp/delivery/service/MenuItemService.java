@@ -10,7 +10,8 @@ import java.util.Optional;
 public interface MenuItemService {
 
   Optional<MenuItem> findById(Long id);
-  List<MenuItem> findAll();
+  List<MenuItem> findAllAvailable();
+  List<MenuItem> findAllArchive();
 
   MenuItem create(MenuItem menuItem);
   MenuItem update(MenuItem menuItem);

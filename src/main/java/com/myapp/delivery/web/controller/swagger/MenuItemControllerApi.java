@@ -10,8 +10,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -30,7 +28,7 @@ public interface MenuItemControllerApi {
                                           summary = "Ингридиенты кратко",
                                           value = """
                             {
-                                "id": 1, 
+                                "id": 1,
                                 "name": "Борщ",
                                 "description": "Классическое блюдо русской кухни",
                                 "price": 100,
@@ -42,7 +40,7 @@ public interface MenuItemControllerApi {
                                     { "id": 1 },
                                     { "id": 2 },
                                     { "id": 3 }
-                                ] 
+                                ]
                             }
                             """
                                   ),
@@ -63,7 +61,7 @@ public interface MenuItemControllerApi {
                                     { "id": 1, "name": "Говядина" },
                                     { "id": 2, "name": "Абрикосы" },
                                     { "id": 3, "name": "Каперсы" }
-                                ] 
+                                ]
                             }
                             """
                                   )
@@ -95,7 +93,7 @@ public interface MenuItemControllerApi {
                                     { "id": 1 },
                                     { "id": 2 },
                                     { "id": 3 }
-                                ] 
+                                ]
                             }
                             """
                                   ),
@@ -115,7 +113,7 @@ public interface MenuItemControllerApi {
                                     { "id": 1, "name": "Говядина" },
                                     { "id": 2, "name": "Абрикосы" },
                                     { "id": 3, "name": "Каперсы" }
-                                ] 
+                                ]
                             }
                             """
                                   )
@@ -136,9 +134,15 @@ public interface MenuItemControllerApi {
   public MenuItemDto getMenuItem(@Parameter(description = "id элемента меню") Long id);
 
   @Operation(
-          summary = "Получить все элементы меню"
+          summary = "Получить все доступные для заказа элементы меню"
   )
-  public List<MenuItemDto> getMenuItems();
+  public List<MenuItemDto> getAvailableMenuItems();
+
+
+  @Operation(
+          summary = "Получить все архивные (неактивные) элементы меню"
+  )
+  public List<MenuItemDto> getArchiveMenuItems();
 
   @Operation(
           summary = "Загрузить изображение для элемента меню"

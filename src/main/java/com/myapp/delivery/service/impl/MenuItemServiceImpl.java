@@ -30,8 +30,13 @@ public class MenuItemServiceImpl implements MenuItemService {
   }
 
   @Override
-  public List<MenuItem> findAll() {
-    return menuItemRepository.findAll();
+  public List<MenuItem> findAllAvailable() {
+    return menuItemRepository.findAllAvailable();
+  }
+
+  @Override
+  public List<MenuItem> findAllArchive() {
+    return menuItemRepository.findAllArchive();
   }
 
   @Override

@@ -13,7 +13,8 @@ import java.util.Set;
 @Mapper
 public interface MenuItemRepository {
   Optional<MenuItem> findById(Long id);
-  List<MenuItem> findAll();
+  List<MenuItem> findAllAvailable();
+  List<MenuItem> findAllArchive();
 
   void insertMenuItem(MenuItem menuItem);
   void insertMenuItemIngredients(@Param("ingredients") Set<Ingredient> ingredients, @Param("menuItemId") long menuItemId);

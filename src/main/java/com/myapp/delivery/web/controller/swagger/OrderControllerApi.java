@@ -17,8 +17,11 @@ public interface OrderControllerApi {
           requestBody = @RequestBody(
                   content = @io.swagger.v3.oas.annotations.media.Content(
                           mediaType = "application/json",
-                          examples = @ExampleObject(
-                                  value = """
+                          examples = {
+                                  @ExampleObject(
+                                          name = "Без комментария",
+                                          summary = "Без комментария от пользователя",
+                                          value = """
                                             {
                                                 "customerId": 1,
                                                 "totalPrice": 1000,
@@ -43,7 +46,38 @@ public interface OrderControllerApi {
                                                 "deliveryAddress": "улица Гениев"
                                             }
                                             """
-                          )
+                                  ),
+                                  @ExampleObject(
+                                          name = "С комментарием",
+                                          summary = "С комментарием от пользователя",
+                                          value = """
+                                            {
+                                                "customerId": 1,
+                                                "totalPrice": 1000,
+                                                "paymentMethod": "Карта",
+                                                "paymentStatus": "Не оплачено",
+                                                "comment": "Позвоните на 89997776655, если не буду брать",
+                                                "orderItems": [
+                                                    {
+                                                        "menuItem": {
+                                                            "id": 1
+                                                        },
+                                                        "quantity": 2,
+                                                        "priceAtOrderTime": 100
+                                                    },
+                                                    {
+                                                        "menuItem": {
+                                                            "id": 2
+                                                        },
+                                                        "quantity": 10,
+                                                        "priceAtOrderTime": 100
+                                                    }
+                                                ],
+                                                "deliveryAddress": "улица Гениев"
+                                            }
+                                            """
+                                  )
+                          }
                   )
           )
   )

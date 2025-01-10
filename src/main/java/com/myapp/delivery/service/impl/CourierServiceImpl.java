@@ -52,6 +52,11 @@ public class CourierServiceImpl implements CourierService {
   }
 
   @Override
+  public List<Order> getCourierOnTheWayOrders(Long courierId) {
+    return orderRepository.findOnTheWayOrdersByCourierId(courierId);
+  }
+
+  @Override
   public List<Courier> getAllCouriersOnShift() {
     List<Courier> couriers = courierRepository.findAllOnShift();
     couriers.forEach(cur -> {

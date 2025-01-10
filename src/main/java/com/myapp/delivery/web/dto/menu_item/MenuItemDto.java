@@ -1,5 +1,6 @@
 package com.myapp.delivery.web.dto.menu_item;
 
+import com.myapp.delivery.domain.kitchen.Kitchen;
 import com.myapp.delivery.domain.menu_item.Category;
 import com.myapp.delivery.web.dto.ingredient.IngredientDto;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,6 +24,9 @@ public class MenuItemDto {
 
   @Schema(description = "Текстовое описание блюда", example = "Сытный салат с листьями салата айсберг, с помидорками черри и великолепныи соусом Цезарь.")
   private String description;
+
+  @Schema(description = "Вид кухни")
+  private Kitchen kitchen;
 
   @Schema(description = "Цена", example = "490")
   private BigDecimal price;

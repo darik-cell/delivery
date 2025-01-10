@@ -1,6 +1,7 @@
 package com.myapp.delivery.domain.menu_item;
 
 import com.myapp.delivery.domain.ingredient.Ingredient;
+import com.myapp.delivery.domain.kitchen.Kitchen;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,6 +19,7 @@ public class MenuItem {
   private Category category;
   private String imageUrl;
   private Boolean availabilityStatus;
+  private Kitchen kitchen;
 
   private int weight;
   private int calories;

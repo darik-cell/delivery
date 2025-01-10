@@ -36,6 +36,9 @@ public interface MenuItemControllerApi {
                                 "availabilityStatus": "true",
                                 "weight": 50,
                                 "calories": 500,
+                                "kitchen": {
+                                  "id": 1
+                                },
                                 "ingredients": [
                                     { "id": 1 },
                                     { "id": 2 },
@@ -57,6 +60,9 @@ public interface MenuItemControllerApi {
                                 "availabilityStatus": "true",
                                 "weight": 50,
                                 "calories": 500,
+                                "kitchen": {
+                                  "id": 1
+                                },
                                 "ingredients": [
                                     { "id": 1, "name": "Говядина" },
                                     { "id": 2, "name": "Абрикосы" },
@@ -89,6 +95,9 @@ public interface MenuItemControllerApi {
                                 "availabilityStatus": "true",
                                 "weight": 50,
                                 "calories": 500,
+                                "kitchen": {
+                                  "id": 1
+                                },
                                 "ingredients": [
                                     { "id": 1 },
                                     { "id": 2 },
@@ -109,6 +118,9 @@ public interface MenuItemControllerApi {
                                 "availabilityStatus": "true",
                                 "weight": 50,
                                 "calories": 500,
+                                "kitchen": {
+                                  "id": 1
+                                },
                                 "ingredients": [
                                     { "id": 1, "name": "Говядина" },
                                     { "id": 2, "name": "Абрикосы" },

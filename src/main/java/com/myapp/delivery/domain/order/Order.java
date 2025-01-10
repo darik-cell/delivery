@@ -17,6 +17,7 @@ public class Order {
   private int restaurantId;
   private Status status;
   private BigDecimal totalPrice;
+  private String comment;
 
   private List<OrderItem> orderItems;
 

@@ -40,6 +40,11 @@ public class CourierController implements CourierControllerApi {
     return orderMapper.toOrderDto(courierService.getCourierActualOrders(courierId));
   }
 
+  @GetMapping("/{courierId}/all-on-the-way-orders")
+  public List<OrderDto> getOnTheWay(@PathVariable Long courierId) {
+    return orderMapper.toOrderDto(courierService.getCourierOnTheWayOrders(courierId));
+  }
+
   @PutMapping("/{courierId}/end-order")
   public boolean endOrder(@PathVariable Long courierId, @RequestBody OrderDto orderDto) {
     return courierService.endOrder(courierId, orderDto.getId());

@@ -21,9 +21,7 @@ public class OrderDto {
   @Schema(description = "Уникальный идентификатор пользователя", example = "1")
   private int customerId;
 
-  @Schema(description = "Статус заказа",
-          allowableValues = {"в обработке", "готовится", "назначен курьер", "в пути", "доставлен", "отменен"},
-          accessMode = Schema.AccessMode.READ_ONLY)
+  @Schema(description = "Статус заказа", accessMode = Schema.AccessMode.READ_ONLY)
   private Status status;
 
   @Schema(description = "Цена заказа", example = "1890")
@@ -32,10 +30,14 @@ public class OrderDto {
   @Schema(description = "Позиции из заказа")
   private List<OrderItemDto> orderItems;
 
-  @Schema(description = "Способ оплаты", allowableValues = {"Карта", "Наличные"})
+  @Schema(description = "Комментарий от пользователя",
+          example = "Оставьте у двери, но сначала обязательно позвоните на телефон" )
+  private String comment;
+
+  @Schema(description = "Способ оплаты")
   private PaymentMethod paymentMethod;
 
-  @Schema(description = "Статус оплаты", allowableValues = {"Оплачено", "Не оплачено"})
+  @Schema(description = "Статус оплаты")
   private PaymentStatus paymentStatus;
 
   @Schema(description = "Время, когда курьер доставил")

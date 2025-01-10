@@ -18,6 +18,7 @@
                 typeHandler="com.myapp.delivery.repository.PaymentStatusTypeHandler"/>
         <result property="deliveryAddress" column="order_delivery_address"/>
         <result property="deliveryTime" column="order_delivery_time"/>
+        <result property="comment" column="order_comment"/>
         <result property="createdAt" column="order_created_at"/>
         <result property="updatedAt" column="order_updated_at"/>
         <result property="courierId" column="order_courier_id"/>
@@ -39,6 +40,7 @@
         o.payment_status AS order_payment_status,
         o.delivery_address AS order_delivery_address,
         o.delivery_time AS order_delivery_time,
+        o.comment as order_comment,
         o.created_at AS order_created_at,
         o.updated_at AS order_updated_at,
         o.courier_id AS order_courier_id
@@ -51,6 +53,7 @@
         o.id AS order_id,
         o.client_id AS order_client_id,
         o.restaurant_id AS order_restaurant_id,
+        o.comment as order_comment,
         o.status AS order_status,
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
@@ -70,6 +73,7 @@
         o.restaurant_id AS order_restaurant_id,
         o.status AS order_status,
         o.total_price AS order_total_price,
+        o.comment as order_comment,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
         o.delivery_address AS order_delivery_address,
@@ -89,6 +93,7 @@
         o.restaurant_id AS order_restaurant_id,
         o.status AS order_status,
         o.total_price AS order_total_price,
+        o.comment as order_comment,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
         o.delivery_address AS order_delivery_address,
@@ -106,6 +111,7 @@
         o.client_id AS order_client_id,
         o.restaurant_id AS order_restaurant_id,
         o.status AS order_status,
+        o.comment as order_comment,
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
@@ -122,6 +128,7 @@
         SELECT
         o.id AS order_id,
         o.client_id AS order_client_id,
+        o.comment as order_comment,
         o.restaurant_id AS order_restaurant_id,
         o.status AS order_status,
         o.total_price AS order_total_price,
@@ -142,6 +149,7 @@
         o.client_id AS order_client_id,
         o.restaurant_id AS order_restaurant_id,
         o.status AS order_status,
+        o.comment as order_comment,
         o.total_price AS order_total_price,
         o.payment_method AS order_payment_method,
         o.payment_status AS order_payment_status,
@@ -162,7 +170,8 @@
         total_price,
         payment_method,
         payment_status,
-        delivery_address
+        delivery_address,
+        comment
         )
         VALUES (
         #{customerId},
@@ -170,7 +179,8 @@
         #{totalPrice},
         #{paymentMethod},
         #{paymentStatus},
-        #{deliveryAddress}
+        #{deliveryAddress},
+        #{comment}
         )
     </insert>
 

@@ -19,6 +19,10 @@
         <result property="calories" column="menu_item_calories"/>
         <result property="createdAt" column="menu_item_created_at"/>
         <result property="updatedAt" column="menu_item_updated_at"/>
+        <association property="kitchen"
+                     javaType="com.myapp.delivery.domain.kitchen.Kitchen"
+                     select="com.myapp.delivery.repository.KitchenRepository.findById"
+                     column="menu_item_kitchen_id"/>
         <collection property="ingredients"
                     ofType="com.myapp.delivery.domain.ingredient.Ingredient"
                     resultMap="com.myapp.delivery.repository.IngredientRepository.IngredientResultMap"
@@ -40,6 +44,7 @@
         menu_items.weight as menu_item_weight,
         menu_items.created_at AS menu_item_created_at,
         menu_items.updated_at AS menu_item_updated_at,
+        menu_items.kitchen_id AS menu_item_kitchen_id,
         i.id as ingredient_id,
         i.name as ingredient_name
         FROM menu_items
@@ -62,6 +67,7 @@
         menu_items.weight as menu_item_weight,
         menu_items.created_at AS menu_item_created_at,
         menu_items.updated_at AS menu_item_updated_at,
+        menu_items.kitchen_id AS menu_item_kitchen_id,
         i.id as ingredient_id,
         i.name as ingredient_name
         FROM menu_items
@@ -84,6 +90,7 @@
         menu_items.weight as menu_item_weight,
         menu_items.created_at AS menu_item_created_at,
         menu_items.updated_at AS menu_item_updated_at,
+        menu_items.kitchen_id AS menu_item_kitchen_id,
         i.id as ingredient_id,
         i.name as ingredient_name
         FROM menu_items
@@ -107,6 +114,7 @@
         menu_items.weight as menu_item_weight,
         menu_items.created_at AS menu_item_created_at,
         menu_items.updated_at AS menu_item_updated_at,
+        menu_items.kitchen_id AS menu_item_kitchen_id,
         i.id as ingredient_id,
         i.name as ingredient_name
         FROM menu_items
@@ -118,9 +126,9 @@
     <!-- SQL query to create a new MenuItem -->
     <insert id="insertMenuItem" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO menu_items (restaurant_id, name, description, price, category, availability_status,
-        calories, weight, created_at, updated_at)
+        calories, weight, kitchen_id, created_at, updated_at)
         VALUES (#{restaurantId}, #{name}, #{description}, #{price}, #{category.dbValue},
-        #{availabilityStatus}, #{calories}, #{weight}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+        #{availabilityStatus}, #{calories}, #{weight}, #{kitchen.id}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     </insert>
 
     <insert id="insertMenuItemIngredients">
@@ -141,6 +149,7 @@
         category = #{category.dbValue},
         availability_status = #{availabilityStatus},
         calories = #{calories},
+        kitchen_id = #{kitchen.id},
         weight = #{weight},
         updated_at = CURRENT_TIMESTAMP
         WHERE id = #{id}

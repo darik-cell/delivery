@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS
     created_at       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP   DEFAULT CURRENT_TIMESTAMP,
     courier_id       INT         DEFAULT NULL,
-    FOREIGN KEY (client_id) REFERENCES users (id),
+    comment          TEXT        DEFAULT NULL,
+    FOREIGN KEY (client_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
     FOREIGN KEY (courier_id) REFERENCES couriers (user_id)
 );

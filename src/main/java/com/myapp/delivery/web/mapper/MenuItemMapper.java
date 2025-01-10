@@ -1,10 +1,12 @@
 package com.myapp.delivery.web.mapper;
 
+import com.myapp.delivery.domain.kitchen.Kitchen;
 import com.myapp.delivery.domain.menu_item.MenuItem;
 import com.myapp.delivery.web.dto.menu_item.MenuItemDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.Named;
 
 import java.util.List;
 

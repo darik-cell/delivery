@@ -41,4 +41,9 @@ public interface CourierControllerApi {
           summary = "Получить данные курьера по id"
   )
   public CourierDto getById(@Parameter(description = "id курьера") Long courierId);
+
+  @Operation(
+          summary = "Получить заказы, которые курьер должен доставить в текущей доставке"
+  )
+  public List<OrderDto> getOnTheWay(@Parameter(description = "id курьера") Long courierId);
 }

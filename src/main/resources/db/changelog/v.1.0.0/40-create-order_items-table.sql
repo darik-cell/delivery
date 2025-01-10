@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS order_items
     price_at_order_time DECIMAL(10, 2) NOT NULL,
     created_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (order_id) REFERENCES orders (id),
+    FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
     FOREIGN KEY (menu_item_id) REFERENCES menu_items (id)
 );
 

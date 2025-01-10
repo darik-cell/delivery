@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.myapp.delivery.repository.KitchenRepository">
+    <resultMap id="KitchenResultMap" type="com.myapp.delivery.domain.kitchen.Kitchen" autoMapping="false">
+        <id property="id" column="kitchen_id"/>
+        <result property="name" column="kitchen_name"/>
+        <result property="description" column="kitchen_description"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="KitchenResultMap">
+        SELECT
+        id AS kitchen_id,
+        name AS kitchen_name,
+        description AS kitchen_description
+        FROM kitchens
+    </select>
+
+    <select id="findById" resultMap="KitchenResultMap">
+        SELECT
+        id AS kitchen_id,
+        name AS kitchen_name,
+        description AS kitchen_description
+        FROM kitchens
+        where id = #{id}
+    </select>
+
+    <insert id="insertKitchen" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO kitchens (name, description)
+        VALUES (#{name}, #{description})
+    </insert>
+
+    <update id="updateKitchen">
+        UPDATE kitchens
+        SET
+        name = #{name},
+        description = #{description}
+        WHERE id = #{id}
+    </update>
+
+    <!-- SQL query to delete a MenuItem -->
+    <delete id="delete">
+        DELETE FROM kitchens WHERE id = #{id}
+    </delete>
+
+</mapper>

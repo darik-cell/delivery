@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User updateCustomerWithoutPassword(User user) {
-    if (userRepository.findWithoutOrdersByUsername(user.getUsername()).isEmpty()) {
+    if (userRepository.findWithoutOrdersById(user.getId()).isEmpty()) {
       throw new IllegalStateException("Пользователь не существует.");
     }
     userRepository.updateWithoutPassword(user);
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public User updateCustomerWithPassword(User user) {
-    if (userRepository.findWithoutOrdersByUsername(user.getUsername()).isEmpty()) {
+    if (userRepository.findWithoutOrdersById(user.getId()).isEmpty()) {
       throw new IllegalStateException("Пользователь не существует.");
     }
     if (!user.getPassword().equals(user.getPasswordConfirmation())) {

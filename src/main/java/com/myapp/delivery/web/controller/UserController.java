@@ -58,6 +58,7 @@ public class UserController implements UserControllerApi {
             @PathVariable Long id,
             @RequestBody UserDto userDto
     ) {
+        userDto.setId(id);
         User newUser;
         if (userDto.getPassword() == null) {
             newUser = userService.updateCustomerWithoutPassword(userMapper.toUser(userDto));

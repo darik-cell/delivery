@@ -9,6 +9,7 @@
     <include file="10-changeset-restaurants-table.xml" relativeToChangelogFile="true"/>
     <include file="15-changeset-couriers-table.xml" relativeToChangelogFile="true"/>
     <include file="20-changeset-orders-table.xml" relativeToChangelogFile="true"/>
+    <include file="25-changeset-kitchens-table.xml" relativeToChangelogFile="true"/>
     <include file="30-changeset-menu_items-table.xml" relativeToChangelogFile="true"/>
     <include file="40-changeset-order_items-table.xml" relativeToChangelogFile="true"/>
     <include file="50-changeset-users_roles-table.xml" relativeToChangelogFile="true"/>

@@ -14,12 +14,15 @@ import com.myapp.delivery.web.mapper.UserMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.InvalidParameterException;
 import java.util.logging.Logger;
 
 @RestController
@@ -35,8 +38,16 @@ public class AuthController implements AuthControllerApi {
   private final UserMapper userMapper;
 
   @PostMapping("/login")
-  public JwtResponse login(@Validated @RequestBody JwtRequest loginRequest) {
-    return authService.login(loginRequest);
+  public ResponseEntity<?> login(@Validated @RequestBody JwtRequest loginRequest) {
+    JwtResponse res;
+    try {
+       res = authService.login(loginRequest);
+    } catch (InvalidParameterException e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверный логин");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Неверный пароль");
+    }
+    return ResponseEntity.accepted().body(res);
   }
 
   @PostMapping("/register")

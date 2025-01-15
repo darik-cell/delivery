@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.InvalidParameterException;
 import java.util.logging.Logger;
 
 @Service
@@ -27,9 +28,10 @@ public class AuthServiceImpl implements AuthService {
   public JwtResponse login(JwtRequest loginRequest) {
     JwtResponse jwtResponse = new JwtResponse();
     logger.info("loginRequest: " + loginRequest);
-    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
     User user = userService.getWithoutOrdersByUsername(loginRequest.getUsername())
-            .orElseThrow(() -> new RuntimeException("User with username " + loginRequest.getUsername() + " not found"));
+            .orElseThrow(() -> new InvalidParameterException("User with username " + loginRequest.getUsername() + " not found"));
+    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+    logger.info("После authenticationManager.authenticate");
     jwtResponse.setId(user.getId());
     jwtResponse.setUsername(user.getUsername());
     jwtResponse.setAccessToken(jwtTokenProvider.createAccessToken(user.getId(), user.getUsername(), user.getRoles()));

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Auth-controller")
 public interface AuthControllerApi {
@@ -17,7 +18,7 @@ public interface AuthControllerApi {
           summary = "Аутентификация (логин)",
           description = "Выдает токены если валидные логин и пароль"
   )
-  public JwtResponse login(JwtRequest loginRequest);
+  public ResponseEntity<?> login(JwtRequest loginRequest);
 
   @Operation(
           summary = "Регистрация",

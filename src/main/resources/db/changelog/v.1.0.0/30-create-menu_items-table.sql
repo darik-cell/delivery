@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS menu_items
     description         TEXT                    DEFAULT NULL,
     price               DECIMAL(10, 2) NOT NULL,
     category            VARCHAR(50) CHECK (category IN
-                                           ('Суп', 'Закуска', 'Основное блюдо', 'Гарнир', 'Салат', 'Напиток')),
+                                           ('Суп', 'Закуска', 'Десерт', 'Основное блюдо', 'Гарнир', 'Салат', 'Напиток')),
     image_url           VARCHAR(255)            DEFAULT NULL,
     availability_status BOOLEAN                 DEFAULT TRUE,
     calories            int            not null,
